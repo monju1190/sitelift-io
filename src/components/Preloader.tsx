@@ -8,93 +8,101 @@ export function Preloader() {
     const [counter, setCounter] = useState(0);
 
     useEffect(() => {
+        // Slightly faster counter for better UX
+        const duration = 2000; // 2 seconds total
+        const interval = 20;
+        const step = 100 / (duration / interval);
+
         const timer = setInterval(() => {
             setCounter((prev) => {
-                if (prev >= 100) {
+                const next = prev + step;
+                if (next >= 100) {
                     clearInterval(timer);
                     setTimeout(() => setLoading(false), 800);
                     return 100;
                 }
-                return prev + 1;
+                return next;
             });
-        }, 15);
+        }, interval);
 
         return () => clearInterval(timer);
     }, []);
+
+    // Format counter to integer
+    const displayCounter = Math.min(100, Math.floor(counter));
 
     return (
         <AnimatePresence mode="wait">
             {loading && (
                 <motion.div
-                    className="fixed inset-0 z-[200] flex flex-col items-center justify-center bg-black text-white px-4"
+                    className="fixed inset-0 z-[200] flex flex-col items-center justify-center bg-black text-white overflow-hidden"
                     initial={{ y: 0 }}
                     exit={{
-                        y: "-100%",
-                        transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1] }
+                        y: "-100%", // Slide up like a curtain
+                        transition: { duration: 1, ease: [0.76, 0, 0.24, 1] }
                     }}
                 >
-                    {/* Background Noise/Grain Effect could go here if requested, keeping it clean for now */}
+                    {/* Background Grid Pattern (Subtle) */}
+                    <div className="absolute inset-0 opacity-10 pointer-events-none"
+                        style={{
+                            backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)',
+                            backgroundSize: '40px 40px'
+                        }}
+                    />
 
-                    <div className="relative w-full max-w-md">
-                        {/* Main Title Reveal */}
-                        <div className="overflow-hidden mb-4 flex justify-center">
-                            <motion.div
-                                initial={{ y: "100%" }}
+                    <div className="relative z-10 w-full max-w-3xl px-6 md:px-0">
+                        {/* Main Typography */}
+                        <div className="overflow-hidden flex justify-center mb-12">
+                            <motion.h1
+                                initial={{ y: "110%" }}
                                 animate={{ y: 0 }}
                                 transition={{ duration: 1.2, ease: [0.33, 1, 0.68, 1], delay: 0.2 }}
-                                className="text-6xl md:text-8xl font-black tracking-tighter uppercase relative z-10"
+                                className="text-[12vw] md:text-[8rem] font-black tracking-tighter leading-[0.85] text-center"
                             >
                                 SITELIFT
-                            </motion.div>
+                            </motion.h1>
                         </div>
 
-                        {/* Progress Bar Container */}
-                        <div className="relative h-[2px] w-full bg-white/10 overflow-hidden rounded-full mb-4">
+                        {/* Progress Bar & Counter */}
+                        <div className="relative">
                             <motion.div
-                                className="absolute top-0 left-0 h-full bg-white"
-                                initial={{ width: "0%" }}
-                                animate={{ width: `${counter}%` }}
-                                transition={{ ease: "linear" }}
-                            />
-                        </div>
+                                className="h-[1px] bg-white/20 w-full rounded-full overflow-hidden mb-4"
+                            >
+                                <motion.div
+                                    className="h-full bg-white"
+                                    initial={{ width: "0%" }}
+                                    animate={{ width: `${displayCounter}%` }}
+                                    transition={{ ease: "linear", duration: 0.1 }}
+                                />
+                            </motion.div>
 
-                        {/* Counter and Status Text */}
-                        <div className="flex justify-between items-center text-xs md:text-sm font-medium uppercase tracking-widest text-white/50">
-                            <motion.div
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.4 }}
-                            >
-                                Loading Experience
-                            </motion.div>
-                            <motion.div
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.4 }}
-                                className="tabular-nums text-white"
-                            >
-                                {counter}%
-                            </motion.div>
+                            <div className="flex justify-between items-end">
+                                <motion.div
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.5 }}
+                                    className="text-xs font-bold tracking-[0.2em] uppercase text-white/50"
+                                >
+                                    Experience Loading
+                                </motion.div>
+                                <motion.div
+                                    className="text-6xl md:text-8xl font-medium tracking-tight tabular-nums leading-none"
+                                >
+                                    {displayCounter}
+                                    <span className="text-2xl md:text-4xl text-white/40 ml-1">%</span>
+                                </motion.div>
+                            </div>
                         </div>
                     </div>
 
-                    {/* Decorative Elements */}
+                    {/* Bottom Status Text */}
                     <motion.div
-                        className="absolute bottom-10 left-10 text-[10px] uppercase tracking-widest text-white/20 hidden md:block"
+                        className="absolute bottom-10 left-0 w-full text-center text-[10px] md:text-xs uppercase tracking-widest text-white/30"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        transition={{ delay: 0.5 }}
+                        transition={{ delay: 0.8 }}
                     >
-                        © 2026 Sitelift Inc.
-                    </motion.div>
-
-                    <motion.div
-                        className="absolute bottom-10 right-10 text-[10px] uppercase tracking-widest text-white/20 hidden md:block"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.5 }}
-                    >
-                        Prepare for Lift Off
+                        Redefining Performance
                     </motion.div>
                 </motion.div>
             )}
