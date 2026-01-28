@@ -49,7 +49,7 @@ export function Benefits() {
     const bgTextX = useTransform(scrollYProgress, [0, 1], ["20%", "-20%"]);
 
     return (
-        <section ref={containerRef} className="relative overflow-hidden py-40 bg-[#050505]">
+        <section ref={containerRef} className="relative overflow-hidden py-32 bg-[#050505]">
             {/* Cinematic Background Text */}
             <div className="absolute top-0 left-0 right-0 pointer-events-none select-none overflow-hidden h-full flex items-center">
                 <motion.div
@@ -81,14 +81,38 @@ export function Benefits() {
                             <span className="text-white/20">ELITE PERFORMANCE</span>
                         </motion.h2>
                     </div>
-                    <motion.p
-                        initial={{ opacity: 0 }}
-                        whileInView={{ opacity: 1 }}
-                        transition={{ delay: 0.5, duration: 1 }}
-                        className="max-w-sm text-lg text-muted-foreground/60"
-                    >
-                        WordPress and Webflow were built for the past. We build for the future of the web.
-                    </motion.p>
+                    <div className="flex flex-col gap-10 md:flex-row md:items-end md:justify-between flex-grow">
+                        <motion.p
+                            initial={{ opacity: 0 }}
+                            whileInView={{ opacity: 1 }}
+                            transition={{ delay: 0.5, duration: 1 }}
+                            className="max-w-sm text-lg text-muted-foreground/60 leading-relaxed font-medium"
+                        >
+                            WordPress and Webflow were built for the past. We build for the future of the web.
+                        </motion.p>
+
+                        {/* Right side: Performance Terminal Animation */}
+                        <motion.div
+                            initial={{ opacity: 0, x: 20 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            className="hidden lg:block w-[300px] rounded-2xl border border-white/10 bg-black p-6 font-mono text-[10px]"
+                        >
+                            <div className="mb-4 flex gap-1.5">
+                                <div className="h-2 w-2 rounded-full bg-red-500/50" />
+                                <div className="h-2 w-2 rounded-full bg-yellow-500/50" />
+                                <div className="h-2 w-2 rounded-full bg-green-500/50" />
+                            </div>
+                            <div className="space-y-2 text-emerald-500/60">
+                                <p className="text-white/40">{">"} ANALYZING PAYLOAD...</p>
+                                <motion.p animate={{ opacity: [1, 0, 1] }} transition={{ repeat: Infinity, duration: 1 }}>{">"} OPTIMIZING ASSETS...</motion.p>
+                                <div className="flex gap-2 text-white">
+                                    <span className="text-emerald-500">FASTEST</span>
+                                    <span>[||||||||||] 100%</span>
+                                </div>
+                                <p className="text-white/20">ELITE PERFORMANCE ENGAGED</p>
+                            </div>
+                        </motion.div>
+                    </div>
                 </div>
 
                 <div className="grid grid-cols-1 gap-px bg-white/10 overflow-hidden rounded-[2.5rem] border border-white/10">

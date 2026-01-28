@@ -10,9 +10,14 @@ export function Showcase() {
         offset: ["start end", "end start"]
     });
 
-    const y1 = useTransform(scrollYProgress, [0, 1], [0, -200]);
-    const y2 = useTransform(scrollYProgress, [0, 1], [0, -400]);
-    const y3 = useTransform(scrollYProgress, [0, 1], [0, -600]);
+    const y1 = useTransform(scrollYProgress, [0, 0.5, 1], [400, 0, -400]);
+    const y2 = useTransform(scrollYProgress, [0, 0.5, 1], [600, 0, -600]);
+    const y3 = useTransform(scrollYProgress, [0, 0.5, 1], [800, 0, -800]);
+
+    // Panel Sliding Transforms
+    const panel1X = useTransform(scrollYProgress, [0.4, 0.6], ["100%", "0%"]);
+    const panel2X = useTransform(scrollYProgress, [0.6, 0.8], ["100%", "0%"]);
+
     const rotate = useTransform(scrollYProgress, [0, 1], [0, 10]);
     const opacity = useTransform(scrollYProgress, [0, 0.1, 0.9, 1], [0, 1, 1, 0]);
 
@@ -101,6 +106,25 @@ export function Showcase() {
                     style={{ y: y2, scale: 1.2 }}
                     className="absolute -bottom-[10%] -right-[5%] h-[500px] w-[500px] rounded-full border border-white/[0.02] bg-gradient-to-br from-white/[0.03] to-transparent p-12 transition-colors flex items-center justify-center blur-3xl"
                 />
+
+                {/* Fantik-style Sliding Info Panels (Right Side) */}
+                <div className="absolute right-0 top-0 bottom-0 w-[400px] hidden xl:flex flex-col justify-center gap-10 pr-20 pointer-events-none">
+                    <motion.div
+                        style={{ x: panel1X }}
+                        className="rounded-3xl border border-white/10 bg-white/5 backdrop-blur-3xl p-8"
+                    >
+                        <h4 className="text-[10px] font-black tracking-widest text-white/40 uppercase mb-4">Scalability</h4>
+                        <p className="text-xl font-bold text-white">Unlimited growth without the performance tax.</p>
+                    </motion.div>
+
+                    <motion.div
+                        style={{ x: panel2X }}
+                        className="rounded-3xl border border-white/10 bg-white/5 backdrop-blur-3xl p-8"
+                    >
+                        <h4 className="text-[10px] font-black tracking-widest text-white/40 uppercase mb-4">Future-Proof</h4>
+                        <p className="text-xl font-bold text-white">Built on the latest React 19 standards.</p>
+                    </motion.div>
+                </div>
             </div>
         </section>
     );

@@ -41,7 +41,7 @@ export function Hero() {
     }, [mouseX, mouseY]);
 
     return (
-        <section ref={containerRef} className="relative flex min-h-[100vh] flex-col items-center justify-start overflow-hidden px-6 pt-32 pb-40 text-center">
+        <section ref={containerRef} className="relative flex min-h-[100vh] flex-col items-center justify-start overflow-hidden px-6 pt-32 pb-20 text-center">
             {/* Background Layer with Parallax */}
             <motion.div style={{ y: bgY }} className="absolute inset-0 -z-10 origin-top">
                 {/* Deep Gradient */}
