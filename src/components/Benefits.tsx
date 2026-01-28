@@ -49,7 +49,7 @@ export function Benefits() {
     const bgTextX = useTransform(scrollYProgress, [0, 1], ["20%", "-20%"]);
 
     return (
-        <section ref={containerRef} className="relative overflow-hidden py-32 bg-[#050505]">
+        <section ref={containerRef} className="relative overflow-hidden py-20 bg-[#050505]">
             {/* Cinematic Background Text */}
             <div className="absolute top-0 left-0 right-0 pointer-events-none select-none overflow-hidden h-full flex items-center">
                 <motion.div
@@ -61,7 +61,7 @@ export function Benefits() {
             </div>
 
             <div className="relative z-10 mx-auto max-w-7xl px-6">
-                <div className="mb-32 flex flex-col items-start gap-6 md:flex-row md:items-end md:justify-between">
+                <div className="mb-20 flex flex-col items-start gap-6 md:flex-row md:items-end md:justify-between">
                     <div className="max-w-2xl">
                         <motion.div
                             initial={{ opacity: 0, x: -20 }}

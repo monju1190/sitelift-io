@@ -10,6 +10,7 @@ import { Pricing } from "@/components/Pricing";
 import { FAQ } from "@/components/FAQ";
 import { Showcase } from "@/components/Showcase";
 import { Founders } from "@/components/Founders";
+import { DataShowcase } from "@/components/DataShowcase";
 
 export default function Home() {
   return (
@@ -23,6 +24,8 @@ export default function Home() {
       <Benefits />
 
       <Showcase />
+
+      <DataShowcase />
 
       <Services />
 

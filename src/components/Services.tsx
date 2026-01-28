@@ -51,9 +51,9 @@ export function Services() {
     }, []);
 
     return (
-        <section id="services" ref={containerRef} className="relative px-6 py-40 bg-black overflow-hidden">
+        <section id="services" ref={containerRef} className="relative px-6 py-24 bg-black overflow-hidden">
             <div className="mx-auto max-w-7xl">
-                <div className="mb-32 flex flex-col md:flex-row items-end justify-between gap-10">
+                <div className="mb-20 flex flex-col md:flex-row items-end justify-between gap-10">
                     <div className="max-w-2xl">
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
