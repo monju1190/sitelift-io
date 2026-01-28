@@ -44,11 +44,11 @@ export function DataShowcase() {
     const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.8, 1, 0.8]);
 
     return (
-        <section ref={containerRef} className="relative overflow-hidden bg-black py-24 px-6">
+        <section ref={containerRef} className="relative overflow-hidden bg-black py-16 px-6">
             <div className="mx-auto max-w-7xl">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
                     {/* Left Side: Content */}
-                    <div className="space-y-12">
+                    <div className="space-y-8">
                         <motion.div
                             initial={{ opacity: 0, x: -50 }}
                             whileInView={{ opacity: 1, x: 0 }}
@@ -77,7 +77,7 @@ export function DataShowcase() {
                         </motion.p>
 
                         {/* Metrics Grid */}
-                        <div className="grid grid-cols-2 gap-6">
+                        <div className="grid grid-cols-2 gap-4">
                             {metrics.map((metric, i) => (
                                 <motion.div
                                     key={i}
@@ -89,9 +89,9 @@ export function DataShowcase() {
                                         ease: [0.16, 1, 0.3, 1]
                                     }}
                                     viewport={{ once: true }}
-                                    className="group relative rounded-3xl border border-white/5 bg-white/[0.02] p-6 hover:bg-white/[0.04] hover:border-white/10 transition-all duration-500"
+                                    className="group relative rounded-3xl border border-white/5 bg-white/[0.02] p-5 hover:bg-white/[0.04] hover:border-white/10 transition-all duration-500"
                                 >
-                                    <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-white text-black transition-transform duration-500 group-hover:scale-110 group-hover:rotate-6">
+                                    <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-white text-black transition-transform duration-500 group-hover:scale-110 group-hover:rotate-6">
                                         <metric.icon className="h-5 w-5" />
                                     </div>
                                     <div className="text-4xl font-black tracking-tighter text-white mb-1">
@@ -106,10 +106,10 @@ export function DataShowcase() {
                     </div>
 
                     {/* Right Side: Animated Visual Element (Fantik-style) */}
-                    <div className="relative h-[600px] hidden lg:block">
+                    <div className="relative hidden lg:block">
                         <motion.div
                             style={{ y, opacity, scale }}
-                            className="sticky top-1/2 -translate-y-1/2"
+                            className="relative"
                         >
                             {/* Main Card with Scroll Animation */}
                             <div className="relative">

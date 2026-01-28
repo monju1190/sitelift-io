@@ -40,9 +40,9 @@ export function Process() {
     });
 
     return (
-        <section id="process" ref={containerRef} className="px-6 py-32">
+        <section id="process" ref={containerRef} className="px-6 py-20">
             <div className="mx-auto max-w-4xl">
-                <h2 className="mb-20 text-center text-3xl font-bold tracking-tighter md:text-5xl">Our Process</h2>
+                <h2 className="mb-12 text-center text-3xl font-bold tracking-tighter md:text-5xl">Our Process</h2>
 
                 <div className="relative">
                     {/* Timeline Line */}

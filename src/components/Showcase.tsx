@@ -22,7 +22,7 @@ export function Showcase() {
     const opacity = useTransform(scrollYProgress, [0, 0.1, 0.9, 1], [0, 1, 1, 0]);
 
     return (
-        <section ref={containerRef} className="relative h-[250vh] bg-black">
+        <section ref={containerRef} className="relative h-[180vh] bg-black">
             <div className="sticky top-0 h-screen flex flex-col items-center justify-center px-6 overflow-hidden">
                 <motion.div
                     style={{ opacity }}
