@@ -1,0 +1,133 @@
+"use client";
+
+import { motion, useScroll, useTransform, useMotionValue, useSpring, Variants } from "framer-motion";
+import { ArrowRight, Zap, Globe, BarChart3 } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
+
+const itemVariants: Variants = {
+    hidden: { y: 40, opacity: 0, filter: "blur(10px)" },
+    visible: {
+        y: 0,
+        opacity: 1,
+        filter: "blur(0px)",
+        transition: { duration: 1, ease: [0.16, 1, 0.3, 1] },
+    },
+};
+
+export function Hero() {
+    const containerRef = useRef<HTMLDivElement>(null);
+    const buttonRef = useRef<HTMLButtonElement>(null);
+
+    const mouseX = useMotionValue(0);
+    const mouseY = useMotionValue(0);
+
+    const springConfig = { damping: 25, stiffness: 150 };
+    const dx = useSpring(mouseX, springConfig);
+    const dy = useSpring(mouseY, springConfig);
+
+    // Parallax for background
+    const { scrollY } = useScroll();
+    const bgY = useTransform(scrollY, [0, 1000], [0, 300]);
+
+    useEffect(() => {
+        const handleMouseMove = (e: MouseEvent) => {
+            const { clientX, clientY } = e;
+            mouseX.set(clientX);
+            mouseY.set(clientY);
+        };
+        window.addEventListener("mousemove", handleMouseMove);
+        return () => window.removeEventListener("mousemove", handleMouseMove);
+    }, [mouseX, mouseY]);
+
+    return (
+        <section ref={containerRef} className="relative flex min-h-[100vh] flex-col items-center justify-start overflow-hidden px-6 pt-32 pb-40 text-center">
+            {/* Background Layer with Parallax */}
+            <motion.div style={{ y: bgY }} className="absolute inset-0 -z-10 origin-top">
+                {/* Deep Gradient */}
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(15,15,20,1)_0%,rgba(0,0,0,1)_100%)]" />
+
+                {/* Animated Grid */}
+                <div className="absolute inset-0 opacity-[0.15] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_10%,#000_70%,transparent_100%)] bg-[linear-gradient(to_right,#ffffff10_1px,transparent_1px),linear-gradient(to_bottom,#ffffff10_1px,transparent_1px)] bg-[size:60px_60px]" />
+
+                {/* Interactive Highlight */}
+                <motion.div
+                    style={{ left: dx, top: dy }}
+                    className="pointer-events-none fixed z-0 h-[800px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/[0.02] blur-[120px]"
+                />
+            </motion.div>
+
+            <motion.div
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                transition={{ staggerChildren: 0.15, delayChildren: 0.2 }}
+                className="relative z-10 max-w-5xl"
+            >
+                <motion.div
+                    variants={itemVariants}
+                    className="mb-10 inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-5 py-2 text-[10px] font-black tracking-[0.3em] text-muted-foreground uppercase"
+                >
+                    <span className="flex h-2 w-2 rounded-full bg-white shadow-[0_0_10px_rgba(255,255,255,0.8)]" />
+                    The New Standard for Performance
+                </motion.div>
+
+                <motion.h1
+                    variants={itemVariants}
+                    className="mb-8 text-7xl font-bold tracking-[-0.04em] md:text-[11rem] md:leading-[0.95] text-white"
+                >
+                    LIFT YOUR <br />
+                    <span className="text-muted-foreground/30">NEXT.JS</span> SITE
+                </motion.h1>
+
+                <motion.p
+                    variants={itemVariants}
+                    className="mx-auto mb-16 max-w-2xl text-lg text-muted-foreground/80 leading-relaxed md:text-2xl font-medium"
+                >
+                    We architect ultra-fast, conversion-focused <span className="text-white">Next.js</span> experiences for businesses that refuse to compromise.
+                </motion.p>
+
+                <motion.div
+                    variants={itemVariants}
+                    className="flex flex-col items-center justify-center gap-6 sm:flex-row mb-32"
+                >
+                    <Link
+                        href="/checkout?plan=professional"
+                        className="group relative flex items-center justify-center overflow-hidden rounded-full bg-white px-12 py-6 text-sm font-black text-black transition-all hover:scale-[1.02] active:scale-95"
+                    >
+                        <span className="relative z-10 flex items-center gap-3">
+                            GET YOUR FREE AUDIT
+                            <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+                        </span>
+                    </Link>
+
+                    <Link
+                        href="/work"
+                        className="rounded-full border border-white/10 bg-white/5 px-12 py-6 text-sm font-black text-white transition-all hover:bg-white/10 hover:border-white/20"
+                    >
+                        VIEW OUR WORK
+                    </Link>
+                </motion.div>
+
+                {/* Metrics Bar - Fixed Overlap with Margin/Padding */}
+                <motion.div
+                    variants={itemVariants}
+                    className="grid grid-cols-2 gap-px overflow-hidden rounded-3xl border border-white/10 bg-white/5 backdrop-blur-md md:grid-cols-4"
+                >
+                    {[
+                        { label: "Vercel optimized", value: "99+", icon: Zap },
+                        { label: "Lighthouse core", value: "100", icon: BarChart3 },
+                        { label: "Global Edge", value: "Enabled", icon: Globe },
+                        { label: "Search Ranking", value: "Top 3", icon: BarChart3 },
+                    ].map((stat, i) => (
+                        <div key={i} className="flex flex-col items-center justify-center gap-2 p-8 bg-black/40 hover:bg-white/[0.03] transition-colors group">
+                            <stat.icon className="h-4 w-4 text-muted-foreground group-hover:text-white transition-colors" />
+                            <span className="text-2xl font-bold tracking-tighter text-white">{stat.value}</span>
+                            <span className="text-[10px] font-black tracking-widest text-muted-foreground uppercase">{stat.label}</span>
+                        </div>
+                    ))}
+                </motion.div>
+            </motion.div>
+        </section>
+    );
+}
