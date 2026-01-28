@@ -10,6 +10,24 @@ export function ScrollIndicator() {
     const { scrollY } = useScroll();
     const opacity = useTransform(scrollY, [0, 300], [1, 0]);
 
+    const [maxScroll, setMaxScroll] = useState(0);
+
+    // Initial mount effect to set max scroll
+    useEffect(() => {
+        const updateMaxScroll = () => {
+            setMaxScroll(document.documentElement.scrollHeight - window.innerHeight);
+        };
+        updateMaxScroll();
+        window.addEventListener("resize", updateMaxScroll);
+        return () => window.removeEventListener("resize", updateMaxScroll);
+    }, []);
+
+    const strokeDashoffset = useTransform(
+        scrollY,
+        [0, maxScroll || 1], // Prevent division by zero or invalid range
+        [188.4, 0]
+    );
+
     useEffect(() => {
         let lastScrollY = window.scrollY;
         let ticking = false;
@@ -114,11 +132,7 @@ export function ScrollIndicator() {
                         strokeWidth="2"
                         fill="none"
                         strokeDasharray="188.4"
-                        strokeDashoffset={useTransform(
-                            scrollY,
-                            [0, document.documentElement.scrollHeight - window.innerHeight],
-                            [188.4, 0]
-                        )}
+                        strokeDashoffset={strokeDashoffset}
                         className="opacity-30"
                     />
                 </svg>
