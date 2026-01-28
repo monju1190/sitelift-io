@@ -11,6 +11,7 @@ const navLinks = [
     { name: "Founders", href: "/founders" },
     { name: "Services", href: "/#services" },
     { name: "Pricing", href: "/#pricing" },
+    { name: "Contact", href: "/contact" },
 ];
 
 export function Navbar() {
@@ -73,7 +74,7 @@ export function Navbar() {
                     ))}
                 </div>
                 <Link
-                    href="/#contact"
+                    href="/contact"
                     className="group relative flex items-center gap-2 overflow-hidden rounded-full bg-white px-5 py-2 text-xs font-black text-black transition-all hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(255,255,255,0.1)]"
                 >
                     <span className="relative z-10">CONTACT</span>

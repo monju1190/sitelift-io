@@ -2,7 +2,7 @@
 
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Zap, Globe, Gauge, Cpu, ArrowUpRight } from "lucide-react";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 
 const services = [
     {
@@ -41,6 +41,15 @@ export function Services() {
     const y1 = useTransform(scrollYProgress, [0, 1], [0, -100]);
     const y2 = useTransform(scrollYProgress, [0, 1], [0, 100]);
 
+    // Disable parallax on mobile for better visibility/layout alignment
+    const [isMobile, setIsMobile] = useState(false);
+    useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth < 768);
+        checkMobile();
+        window.addEventListener("resize", checkMobile);
+        return () => window.removeEventListener("resize", checkMobile);
+    }, []);
+
     return (
         <section id="services" ref={containerRef} className="relative px-6 py-40 bg-black overflow-hidden">
             <div className="mx-auto max-w-7xl">
@@ -78,7 +87,7 @@ export function Services() {
                     {services.map((service, i) => (
                         <motion.div
                             key={i}
-                            style={{ y: i % 2 === 0 ? y1 : y2 }}
+                            style={{ y: isMobile ? 0 : (i % 2 === 0 ? y1 : y2) }}
                             initial={{ opacity: 0, scale: 0.95, filter: "blur(10px)" }}
                             whileInView={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
                             transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: i * 0.1 }}

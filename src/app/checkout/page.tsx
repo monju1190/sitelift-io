@@ -21,6 +21,11 @@ function CheckoutContent() {
 
     const [step, setStep] = useState(1);
     const [loading, setLoading] = useState(false);
+    const [paymentStatus, setPaymentStatus] = useState<"idle" | "processing" | "success">("idle");
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
 
     const handleProceed = () => {
         setLoading(true);
@@ -28,6 +33,13 @@ function CheckoutContent() {
             setLoading(false);
             setStep(step + 1);
         }, 1500);
+    };
+
+    const handlePayment = () => {
+        setPaymentStatus("processing");
+        setTimeout(() => {
+            setPaymentStatus("success");
+        }, 3000);
     };
 
     return (
@@ -132,38 +144,69 @@ function CheckoutContent() {
                                     </div>
                                 </div>
 
-                                <div className="space-y-6">
-                                    <div className="space-y-2">
-                                        <label className="text-[10px] font-black uppercase tracking-widest text-white/40">Card Details</label>
-                                        <div className="w-full rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-white flex items-center justify-between">
-                                            <span>•••• •••• •••• ••••</span>
-                                            <span className="text-white/40 uppercase text-[10px]">MM / YY</span>
+                                <AnimatePresence mode="wait">
+                                    {paymentStatus !== "success" ? (
+                                        <div className="space-y-6">
+                                            <div className="space-y-2">
+                                                <label className="text-[10px] font-black uppercase tracking-widest text-white/40">Card Details</label>
+                                                <div className="w-full rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-white flex items-center justify-between">
+                                                    <span>•••• •••• •••• ••••</span>
+                                                    <span className="text-white/40 uppercase text-[10px]">MM / YY</span>
+                                                </div>
+                                            </div>
+
+                                            <div className="rounded-2xl bg-emerald-500/10 border border-emerald-500/20 p-4 text-sm text-emerald-400 font-medium">
+                                                Stripe Secure Checkout integrated. International payments active.
+                                            </div>
+
+                                            <div className="space-y-4">
+                                                <button
+                                                    onClick={handlePayment}
+                                                    disabled={paymentStatus === "processing"}
+                                                    className="flex w-full items-center justify-center gap-3 rounded-full bg-white px-8 py-5 transition-all hover:bg-neutral-200"
+                                                >
+                                                    {paymentStatus === "processing" ? (
+                                                        <span className="flex items-center gap-2 text-sm font-black text-black">
+                                                            <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1 }} className="h-4 w-4 border-2 border-black border-t-transparent rounded-full" />
+                                                            PROCESSING...
+                                                        </span>
+                                                    ) : (
+                                                        <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/Google_Pay_%28GPay%29_Logo_%282020%29.svg" alt="Google Pay" className="h-6" />
+                                                    )}
+                                                </button>
+
+                                                <button
+                                                    onClick={handlePayment}
+                                                    disabled={paymentStatus === "processing"}
+                                                    className="flex w-full items-center justify-center gap-3 rounded-full border border-white/10 bg-white/5 px-8 py-5 text-sm font-black text-white hover:bg-white/10 transition-all uppercase tracking-widest"
+                                                >
+                                                    Pay {plan.price} with Card
+                                                </button>
+                                            </div>
+
+                                            <p className="text-center text-[10px] font-bold text-white/20 uppercase tracking-[0.2em]">
+                                                Encrypted by AES-256 Protocol
+                                            </p>
                                         </div>
-                                    </div>
-
-                                    <div className="rounded-2xl bg-emerald-500/10 border border-emerald-500/20 p-4 text-sm text-emerald-400 font-medium">
-                                        Stripe Secure Checkout integrated. Google Pay is ready for production.
-                                    </div>
-
-                                    <div className="space-y-4">
-                                        <button
-                                            onClick={() => alert("Redirecting to Google Pay secure portal...")}
-                                            className="flex w-full items-center justify-center gap-3 rounded-full bg-white px-8 py-5 transition-all hover:bg-neutral-200"
+                                    ) : (
+                                        <motion.div
+                                            initial={{ opacity: 0, scale: 0.9 }}
+                                            animate={{ opacity: 1, scale: 1 }}
+                                            className="flex flex-col items-center justify-center py-10 text-center"
                                         >
-                                            <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/Google_Pay_%28GPay%29_Logo_%282020%29.svg" alt="Google Pay" className="h-6" />
-                                        </button>
-
-                                        <button
-                                            disabled={loading}
-                                            className="flex w-full items-center justify-center gap-3 rounded-full border border-white/10 bg-white/5 px-8 py-5 text-sm font-black text-white hover:bg-white/10 transition-all uppercase tracking-widest"
-                                        >
-                                            Pay {plan.price} with Card
-                                        </button>
-                                    </div>
-                                    <p className="text-center text-[10px] font-bold text-white/20 uppercase tracking-[0.2em]">
-                                        Encrypted by AES-256 Protocol
-                                    </p>
-                                </div>
+                                            <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-emerald-500 text-black">
+                                                <CheckCircle2 className="h-10 w-10" />
+                                            </div>
+                                            <h3 className="text-3xl font-bold mb-4">Payment Success</h3>
+                                            <p className="text-white/40 mb-10 leading-relaxed">
+                                                Your order has been confirmed. Arafat & Monjur will reach out via email within 2 hours.
+                                            </p>
+                                            <Link href="/" className="text-xs font-black tracking-widest uppercase border-b border-white hover:text-white/60 transition-colors">
+                                                Return Home
+                                            </Link>
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
                             </motion.div>
                         )}
                     </AnimatePresence>
