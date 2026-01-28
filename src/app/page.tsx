@@ -11,12 +11,10 @@ import { FAQ } from "@/components/FAQ";
 import { Showcase } from "@/components/Showcase";
 import { Founders } from "@/components/Founders";
 import { DataShowcase } from "@/components/DataShowcase";
-import { ScrollIndicator } from "@/components/ScrollIndicator";
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-black text-white">
-      <ScrollIndicator />
       <Navbar />
 
       <Hero />

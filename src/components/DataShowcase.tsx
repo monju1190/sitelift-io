@@ -106,89 +106,91 @@ export function DataShowcase() {
                     </div>
 
                     {/* Right Side: Animated Visual Element (Fantik-style) */}
-                    <div className="relative hidden lg:block">
-                        <motion.div
-                            style={{ y, opacity, scale }}
-                            className="relative"
-                        >
-                            {/* Main Card with Scroll Animation */}
-                            <div className="relative">
-                                {/* Background Glow */}
-                                <div className="absolute inset-0 rounded-[3rem] bg-gradient-to-br from-white/10 via-white/5 to-transparent blur-3xl" />
+                    <div className="relative hidden lg:block h-full">
+                        <div className="sticky top-1/2 -translate-y-1/2">
+                            <motion.div
+                                style={{ y, opacity, scale }}
+                                className="relative"
+                            >
+                                {/* Main Card with Scroll Animation */}
+                                <div className="relative">
+                                    {/* Background Glow */}
+                                    <div className="absolute inset-0 rounded-[3rem] bg-gradient-to-br from-white/10 via-white/5 to-transparent blur-3xl" />
 
-                                {/* Main Content Card */}
-                                <div className="relative rounded-[3rem] border border-white/10 bg-black/50 backdrop-blur-xl p-12 overflow-hidden">
-                                    {/* Animated Grid Background */}
-                                    <div className="absolute inset-0 opacity-20">
-                                        <div className="absolute inset-0" style={{
-                                            backgroundImage: `linear-gradient(white 1px, transparent 1px), linear-gradient(90deg, white 1px, transparent 1px)`,
-                                            backgroundSize: '50px 50px',
-                                            opacity: 0.1
-                                        }} />
-                                    </div>
+                                    {/* Main Content Card */}
+                                    <div className="relative rounded-[3rem] border border-white/10 bg-black/50 backdrop-blur-xl p-12 overflow-hidden">
+                                        {/* Animated Grid Background */}
+                                        <div className="absolute inset-0 opacity-20">
+                                            <div className="absolute inset-0" style={{
+                                                backgroundImage: `linear-gradient(white 1px, transparent 1px), linear-gradient(90deg, white 1px, transparent 1px)`,
+                                                backgroundSize: '50px 50px',
+                                                opacity: 0.1
+                                            }} />
+                                        </div>
 
-                                    {/* Floating Metrics */}
-                                    <div className="relative space-y-8">
-                                        {metrics.map((metric, i) => (
-                                            <motion.div
-                                                key={i}
-                                                initial={{ opacity: 0, x: 50 }}
-                                                whileInView={{ opacity: 1, x: 0 }}
-                                                transition={{
-                                                    duration: 1,
-                                                    delay: i * 0.15,
-                                                    ease: [0.16, 1, 0.3, 1]
-                                                }}
-                                                viewport={{ once: false, amount: 0.3 }}
-                                                className="flex items-start gap-6 rounded-2xl border border-white/5 bg-white/[0.02] p-6 backdrop-blur-sm hover:bg-white/[0.05] transition-all duration-500"
-                                            >
-                                                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white text-black">
-                                                    <metric.icon className="h-6 w-6" />
-                                                </div>
-                                                <div className="flex-1">
-                                                    <div className="text-3xl font-black tracking-tighter text-white mb-1">
-                                                        {metric.value}
+                                        {/* Floating Metrics */}
+                                        <div className="relative space-y-8">
+                                            {metrics.map((metric, i) => (
+                                                <motion.div
+                                                    key={i}
+                                                    initial={{ opacity: 0, x: 50 }}
+                                                    whileInView={{ opacity: 1, x: 0 }}
+                                                    transition={{
+                                                        duration: 1,
+                                                        delay: i * 0.15,
+                                                        ease: [0.16, 1, 0.3, 1]
+                                                    }}
+                                                    viewport={{ once: false, amount: 0.3 }}
+                                                    className="flex items-start gap-6 rounded-2xl border border-white/5 bg-white/[0.02] p-6 backdrop-blur-sm hover:bg-white/[0.05] transition-all duration-500"
+                                                >
+                                                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white text-black">
+                                                        <metric.icon className="h-6 w-6" />
                                                     </div>
-                                                    <div className="text-xs font-bold tracking-wider text-white/40 uppercase mb-2">
-                                                        {metric.label}
+                                                    <div className="flex-1">
+                                                        <div className="text-3xl font-black tracking-tighter text-white mb-1">
+                                                            {metric.value}
+                                                        </div>
+                                                        <div className="text-xs font-bold tracking-wider text-white/40 uppercase mb-2">
+                                                            {metric.label}
+                                                        </div>
+                                                        <p className="text-sm text-white/60 leading-relaxed">
+                                                            {metric.description}
+                                                        </p>
                                                     </div>
-                                                    <p className="text-sm text-white/60 leading-relaxed">
-                                                        {metric.description}
-                                                    </p>
-                                                </div>
-                                            </motion.div>
-                                        ))}
-                                    </div>
+                                                </motion.div>
+                                            ))}
+                                        </div>
 
-                                    {/* Decorative Elements */}
-                                    <motion.div
-                                        animate={{
-                                            scale: [1, 1.2, 1],
-                                            opacity: [0.3, 0.6, 0.3],
-                                        }}
-                                        transition={{
-                                            duration: 4,
-                                            repeat: Infinity,
-                                            ease: "easeInOut"
-                                        }}
-                                        className="absolute -top-20 -right-20 h-40 w-40 rounded-full bg-white/10 blur-3xl"
-                                    />
-                                    <motion.div
-                                        animate={{
-                                            scale: [1, 1.3, 1],
-                                            opacity: [0.2, 0.5, 0.2],
-                                        }}
-                                        transition={{
-                                            duration: 5,
-                                            repeat: Infinity,
-                                            ease: "easeInOut",
-                                            delay: 1
-                                        }}
-                                        className="absolute -bottom-20 -left-20 h-40 w-40 rounded-full bg-white/10 blur-3xl"
-                                    />
+                                        {/* Decorative Elements */}
+                                        <motion.div
+                                            animate={{
+                                                scale: [1, 1.2, 1],
+                                                opacity: [0.3, 0.6, 0.3],
+                                            }}
+                                            transition={{
+                                                duration: 4,
+                                                repeat: Infinity,
+                                                ease: "easeInOut"
+                                            }}
+                                            className="absolute -top-20 -right-20 h-40 w-40 rounded-full bg-white/10 blur-3xl"
+                                        />
+                                        <motion.div
+                                            animate={{
+                                                scale: [1, 1.3, 1],
+                                                opacity: [0.2, 0.5, 0.2],
+                                            }}
+                                            transition={{
+                                                duration: 5,
+                                                repeat: Infinity,
+                                                ease: "easeInOut",
+                                                delay: 1
+                                            }}
+                                            className="absolute -bottom-20 -left-20 h-40 w-40 rounded-full bg-white/10 blur-3xl"
+                                        />
+                                    </div>
                                 </div>
-                            </div>
-                        </motion.div>
+                            </motion.div>
+                        </div>
                     </div>
                 </div>
             </div>

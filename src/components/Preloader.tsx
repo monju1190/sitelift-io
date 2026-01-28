@@ -17,53 +17,85 @@ export function Preloader() {
                 }
                 return prev + 1;
             });
-        }, 20);
+        }, 15);
 
         return () => clearInterval(timer);
     }, []);
 
     return (
-        <AnimatePresence>
+        <AnimatePresence mode="wait">
             {loading && (
                 <motion.div
+                    className="fixed inset-0 z-[200] flex flex-col items-center justify-center bg-black text-white px-4"
                     initial={{ y: 0 }}
-                    exit={{ y: "-100%" }}
-                    transition={{ duration: 1.2, ease: [0.85, 0, 0.15, 1] }}
-                    className="fixed inset-0 z-[200] flex flex-col items-center justify-center bg-black text-white"
+                    exit={{
+                        y: "-100%",
+                        transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1] }
+                    }}
                 >
-                    <div className="relative overflow-hidden px-10">
-                        <motion.div
-                            initial={{ y: "100%" }}
-                            animate={{ y: 0 }}
-                            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-                            className="text-[12vw] font-black tracking-tighter leading-none"
-                        >
-                            sitelift
-                        </motion.div>
+                    {/* Background Noise/Grain Effect could go here if requested, keeping it clean for now */}
+
+                    <div className="relative w-full max-w-md">
+                        {/* Main Title Reveal */}
+                        <div className="overflow-hidden mb-4 flex justify-center">
+                            <motion.div
+                                initial={{ y: "100%" }}
+                                animate={{ y: 0 }}
+                                transition={{ duration: 1.2, ease: [0.33, 1, 0.68, 1], delay: 0.2 }}
+                                className="text-6xl md:text-8xl font-black tracking-tighter uppercase relative z-10"
+                            >
+                                SITELIFT
+                            </motion.div>
+                        </div>
+
+                        {/* Progress Bar Container */}
+                        <div className="relative h-[2px] w-full bg-white/10 overflow-hidden rounded-full mb-4">
+                            <motion.div
+                                className="absolute top-0 left-0 h-full bg-white"
+                                initial={{ width: "0%" }}
+                                animate={{ width: `${counter}%` }}
+                                transition={{ ease: "linear" }}
+                            />
+                        </div>
+
+                        {/* Counter and Status Text */}
+                        <div className="flex justify-between items-center text-xs md:text-sm font-medium uppercase tracking-widest text-white/50">
+                            <motion.div
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.4 }}
+                            >
+                                Loading Experience
+                            </motion.div>
+                            <motion.div
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.4 }}
+                                className="tabular-nums text-white"
+                            >
+                                {counter}%
+                            </motion.div>
+                        </div>
                     </div>
 
-                    <div className="absolute bottom-10 left-10 overflow-hidden">
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            className="text-[4vw] font-bold text-white/20 italic tabular-nums"
-                        >
-                            {counter}%
-                        </motion.div>
-                    </div>
-
-                    <div className="absolute bottom-10 right-10 max-w-[200px] text-right">
-                        <p className="text-[10px] font-black tracking-widest text-white/40 uppercase">
-                            Optimizing Performance Experience
-                        </p>
-                    </div>
-
-                    {/* Decorative progress line */}
+                    {/* Decorative Elements */}
                     <motion.div
-                        initial={{ scaleX: 0 }}
-                        animate={{ scaleX: counter / 100 }}
-                        className="absolute bottom-0 left-0 h-1 w-full origin-left bg-white"
-                    />
+                        className="absolute bottom-10 left-10 text-[10px] uppercase tracking-widest text-white/20 hidden md:block"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.5 }}
+                    >
+                        © 2026 Sitelift Inc.
+                    </motion.div>
+
+                    <motion.div
+                        className="absolute bottom-10 right-10 text-[10px] uppercase tracking-widest text-white/20 hidden md:block"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.5 }}
+                    >
+                        Prepare for Lift Off
+                    </motion.div>
                 </motion.div>
             )}
         </AnimatePresence>

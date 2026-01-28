@@ -24,9 +24,15 @@ export function ScrollIndicator() {
 
             setScrollDirection(scrollY > lastScrollY ? "down" : "up");
 
-            // Hide when at top or bottom
+            // Hide when at top
             const isAtTop = scrollY < 100;
+            // Hide when at bottom
             const isAtBottom = window.innerHeight + scrollY >= document.documentElement.scrollHeight - 100;
+
+            // Logic: 
+            // - If at top, hide.
+            // - If at bottom, hide.
+            // - Otherwise, show.
             setIsVisible(!isAtTop && !isAtBottom);
 
             lastScrollY = scrollY > 0 ? scrollY : 0;
