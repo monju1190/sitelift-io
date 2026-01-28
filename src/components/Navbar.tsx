@@ -30,9 +30,9 @@ export function Navbar() {
             setScrolled(false);
         }
 
-        if (diff > 20 && latest > 200) {
+        if (diff > 10 && latest > 100) {
             setHidden(true);
-        } else if (diff < -20) {
+        } else if (diff < -10) {
             setHidden(false);
         }
 
@@ -43,12 +43,12 @@ export function Navbar() {
         <motion.header
             initial={{ y: -100, opacity: 0 }}
             animate={{
-                y: hidden ? -100 : 0,
+                y: hidden ? "-120%" : "0%",
                 opacity: 1
             }}
             transition={{
-                duration: 0.6,
-                ease: [0.16, 1, 0.3, 1]
+                duration: 0.4,
+                ease: [0.33, 1, 0.68, 1]
             }}
             className="fixed top-0 left-0 right-0 z-[100] flex justify-center p-6 pointer-events-none"
         >

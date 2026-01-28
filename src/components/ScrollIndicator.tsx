@@ -5,7 +5,7 @@ import { ArrowDown, ArrowUp } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export function ScrollIndicator() {
-    const [isVisible, setIsVisible] = useState(true);
+    const [isVisible, setIsVisible] = useState(false);
     const [scrollDirection, setScrollDirection] = useState<"down" | "up">("down");
     const { scrollY } = useScroll();
     const opacity = useTransform(scrollY, [0, 300], [1, 0]);
