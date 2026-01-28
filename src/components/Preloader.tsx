@@ -3,108 +3,113 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 
+const words = ["PERFORMANCE", "SCALABILITY", "SPEED", "SEO", "NEXT.JS"];
+
 export function Preloader() {
     const [loading, setLoading] = useState(true);
-    const [counter, setCounter] = useState(0);
+    const [index, setIndex] = useState(0);
 
     useEffect(() => {
-        // Slightly faster counter for better UX
-        const duration = 2000; // 2 seconds total
-        const interval = 20;
-        const step = 100 / (duration / interval);
+        // Word cycle animation
+        const wordInterval = setInterval(() => {
+            setIndex((prev) => (prev + 1) % words.length);
+        }, 200);
 
-        const timer = setInterval(() => {
-            setCounter((prev) => {
-                const next = prev + step;
-                if (next >= 100) {
-                    clearInterval(timer);
-                    setTimeout(() => setLoading(false), 800);
-                    return 100;
-                }
-                return next;
-            });
-        }, interval);
+        // Preload duration
+        const timer = setTimeout(() => {
+            clearInterval(wordInterval);
+            setLoading(false);
+        }, 2500);
 
-        return () => clearInterval(timer);
+        return () => {
+            clearInterval(wordInterval);
+            clearTimeout(timer);
+        };
     }, []);
-
-    // Format counter to integer
-    const displayCounter = Math.min(100, Math.floor(counter));
 
     return (
         <AnimatePresence mode="wait">
             {loading && (
-                <motion.div
-                    className="fixed inset-0 z-[200] flex flex-col items-center justify-center bg-black text-white overflow-hidden"
-                    initial={{ y: 0 }}
-                    exit={{
-                        y: "-100%", // Slide up like a curtain
-                        transition: { duration: 1, ease: [0.76, 0, 0.24, 1] }
-                    }}
-                >
-                    {/* Background Grid Pattern (Subtle) */}
-                    <div className="absolute inset-0 opacity-10 pointer-events-none"
-                        style={{
-                            backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)',
-                            backgroundSize: '40px 40px'
-                        }}
-                    />
-
-                    <div className="relative z-10 w-full max-w-3xl px-6 md:px-0">
-                        {/* Main Typography */}
-                        <div className="overflow-hidden flex justify-center mb-12">
-                            <motion.h1
-                                initial={{ y: "110%" }}
-                                animate={{ y: 0 }}
-                                transition={{ duration: 1.2, ease: [0.33, 1, 0.68, 1], delay: 0.2 }}
-                                className="text-[12vw] md:text-[8rem] font-black tracking-tighter leading-[0.85] text-center"
-                            >
-                                SITELIFT
-                            </motion.h1>
-                        </div>
-
-                        {/* Progress Bar & Counter */}
-                        <div className="relative">
+                <>
+                    {/* Top Shutter */}
+                    <motion.div
+                        className="fixed top-0 left-0 w-full h-1/2 bg-black z-[200] flex items-end justify-center overflow-hidden"
+                        initial={{ y: 0 }}
+                        exit={{ y: "-100%", transition: { duration: 1.2, ease: [0.76, 0, 0.24, 1], delay: 0.2 } }}
+                    >
+                        <div className="pb-4 md:pb-8 flex flex-col items-center">
                             <motion.div
-                                className="h-[1px] bg-white/20 w-full rounded-full overflow-hidden mb-4"
+                                className="text-4xl md:text-8xl font-black tracking-tighter text-white overflow-hidden"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0, transition: { duration: 0.2 } }}
                             >
-                                <motion.div
-                                    className="h-full bg-white"
-                                    initial={{ width: "0%" }}
-                                    animate={{ width: `${displayCounter}%` }}
-                                    transition={{ ease: "linear", duration: 0.1 }}
-                                />
+                                <span className="inline-block relative">
+                                    SITE
+                                    {/* Decorative line attached to text */}
+                                    <motion.div
+                                        className="absolute -bottom-4 left-0 w-full h-[2px] bg-white"
+                                        initial={{ scaleX: 0 }}
+                                        animate={{ scaleX: 1 }}
+                                        transition={{ duration: 1.5, ease: "easeInOut" }}
+                                    />
+                                </span>
+                            </motion.div>
+                        </div>
+                    </motion.div>
+
+                    {/* Bottom Shutter */}
+                    <motion.div
+                        className="fixed bottom-0 left-0 w-full h-1/2 bg-black z-[200] flex items-start justify-center overflow-hidden"
+                        initial={{ y: 0 }}
+                        exit={{ y: "100%", transition: { duration: 1.2, ease: [0.76, 0, 0.24, 1], delay: 0.2 } }}
+                    >
+                        <div className="pt-4 md:pt-8 flex flex-col items-center">
+                            <motion.div
+                                className="text-4xl md:text-8xl font-black tracking-tighter text-white/50"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0, transition: { duration: 0.2 } }}
+                            >
+                                LIFT
                             </motion.div>
 
-                            <div className="flex justify-between items-end">
-                                <motion.div
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: 0.5 }}
-                                    className="text-xs font-bold tracking-[0.2em] uppercase text-white/50"
-                                >
-                                    Experience Loading
-                                </motion.div>
-                                <motion.div
-                                    className="text-6xl md:text-8xl font-medium tracking-tight tabular-nums leading-none"
-                                >
-                                    {displayCounter}
-                                    <span className="text-2xl md:text-4xl text-white/40 ml-1">%</span>
-                                </motion.div>
+                            {/* Cycling Tech Words */}
+                            <div className="mt-8 h-6 overflow-hidden relative">
+                                <AnimatePresence mode="popLayout">
+                                    <motion.div
+                                        key={index}
+                                        initial={{ y: 20, opacity: 0 }}
+                                        animate={{ y: 0, opacity: 1 }}
+                                        exit={{ y: -20, opacity: 0 }}
+                                        transition={{ duration: 0.2 }}
+                                        className="text-xs font-mono text-white/40 tracking-[0.5em] uppercase text-center min-w-[200px]"
+                                    >
+                                        {words[index]}
+                                    </motion.div>
+                                </AnimatePresence>
                             </div>
                         </div>
-                    </div>
-
-                    {/* Bottom Status Text */}
-                    <motion.div
-                        className="absolute bottom-10 left-0 w-full text-center text-[10px] md:text-xs uppercase tracking-widest text-white/30"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.8 }}
-                    >
-                        Redefining Performance
                     </motion.div>
-                </motion.div>
+
+                    {/* Center Line Expansion Effect */}
+                    <motion.div
+                        className="fixed top-1/2 left-0 w-full h-[1px] bg-white z-[201] pointer-events-none"
+                        initial={{ scaleX: 0 }}
+                        animate={{ scaleX: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 1.5, ease: "circOut" }}
+                    />
+
+                    {/* Vertical Center Line */}
+                    <motion.div
+                        className="fixed top-0 left-1/2 h-full w-[1px] bg-white/10 z-[199] pointer-events-none"
+                        initial={{ scaleY: 0 }}
+                        animate={{ scaleY: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 1, delay: 0.5 }}
+                    />
+                </>
             )}
         </AnimatePresence>
     );
