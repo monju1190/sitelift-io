@@ -45,7 +45,7 @@ export function Footer() {
                 {/* Left: Brand */}
                 <div className="flex items-center gap-6">
                     <Link href="/" className="group flex items-center gap-2 text-xl font-black tracking-tighter">
-                        <div className="h-3 w-3 rounded-full bg-white transition-transform group-hover:rotate-45" />
+                        <img src="/logo.png" alt="Sitelift Logo" className="h-4 w-4 object-contain transition-transform group-hover:rotate-12" />
                         sitelift
                     </Link>
                     <p className="hidden md:block text-[9px] font-bold text-white/20 tracking-[0.2em] uppercase">
