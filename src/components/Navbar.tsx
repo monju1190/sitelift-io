@@ -3,13 +3,15 @@
 import { motion, useScroll, useMotionValueEvent, AnimatePresence, useSpring, useMotionValue, useTransform } from "framer-motion";
 import { useState, useRef, useEffect, useMemo } from "react";
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { useLenis } from "lenis/react";
 import { ArrowUpRight, Menu, X, Sparkles } from "lucide-react";
 
 const navLinks = [
     { name: "Work", href: "/work" },
     { name: "Founders", href: "/founders" },
-    { name: "Services", href: "/#services" },
-    { name: "Pricing", href: "/#pricing" },
+    { name: "Services", href: "services" },
+    { name: "Pricing", href: "pricing" },
 ];
 
 function MagneticButton({ children, className, onClick }: { children: React.ReactNode, className?: string, onClick?: () => void }) {
@@ -46,6 +48,9 @@ export function Navbar() {
     const { scrollY } = useScroll();
     const [scrolled, setScrolled] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const pathname = usePathname();
+    const router = useRouter();
+    const lenis = useLenis();
 
     const mouseX = useMotionValue(0);
     const mouseY = useMotionValue(0);
@@ -64,6 +69,29 @@ export function Navbar() {
     useMotionValueEvent(scrollY, "change", (latest) => {
         setScrolled(latest > 100);
     });
+
+    const handleLogoClick = (e: React.MouseEvent) => {
+        if (pathname === "/") {
+            e.preventDefault();
+            lenis?.scrollTo(0, { duration: 1.5 });
+        }
+    };
+
+    const handleNavClick = (e: React.MouseEvent, href: string) => {
+        if (href.startsWith("/")) return; // Normal page navigation
+
+        // Handle hash links
+        if (pathname === "/") {
+            e.preventDefault();
+            const target = document.getElementById(href);
+            if (target) {
+                lenis?.scrollTo(target, { duration: 1.2, offset: -100 });
+            }
+        } else {
+            // If on another page, navigate home with hash
+            router.push(`/#${href}`);
+        }
+    };
 
     return (
         <motion.header
@@ -99,7 +127,7 @@ export function Navbar() {
                         }`}
                 >
                     {/* Branding Orb */}
-                    <Link href="/" className="group relative flex items-center gap-3">
+                    <Link href="/" onClick={handleLogoClick} className="group relative flex items-center gap-3">
                         <div className="relative flex h-14 w-14 items-center justify-center overflow-hidden rounded-full bg-white text-black transition-all hover:scale-110 active:scale-95 shadow-[0_0_30px_rgba(255,255,255,0.1)]">
                             <img src="/logo.png" alt="Sitelift Logo" className="relative z-10 h-14 w-14 object-contain scale-[1.5]" />
                             <motion.div className="absolute inset-0 bg-neutral-200" initial={{ y: "100%" }} whileHover={{ y: 0 }} transition={{ duration: 0.3 }} />
@@ -126,7 +154,11 @@ export function Navbar() {
                             >
                                 {navLinks.map((link) => (
                                     <MagneticButton key={link.name}>
-                                        <Link href={link.href} className="group relative px-6 py-3 text-[10px] font-black tracking-[0.3em] text-white/30 uppercase transition-all hover:text-white">
+                                        <Link
+                                            href={link.href.startsWith("/") ? link.href : `/#${link.href}`}
+                                            onClick={(e) => handleNavClick(e, link.href)}
+                                            className="group relative px-6 py-3 text-[10px] font-black tracking-[0.3em] text-white/30 uppercase transition-all hover:text-white"
+                                        >
                                             {link.name}
                                             <motion.div className="absolute inset-x-4 -bottom-1 h-px bg-white/20 scale-x-0 group-hover:scale-x-100 transition-transform" />
                                         </Link>

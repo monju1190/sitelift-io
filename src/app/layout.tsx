@@ -4,6 +4,7 @@ import "./globals.css";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import { ScrollIndicator } from "@/components/ScrollIndicator";
 import { Preloader } from "@/components/Preloader";
+import { HashScroll } from "@/components/HashScroll";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,6 +31,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased selection:bg-white selection:text-black`}
       >
+        <HashScroll />
         <Preloader />
         <SmoothScroll>
           {children}

@@ -8,7 +8,11 @@ export default function Template({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
 
     useEffect(() => {
-        window.scrollTo(0, 0);
+        // If there's a hash in the URL (e.g., #pricing), don't force scroll-to-top immediately
+        // Standard Next.js behavior or a specialized effect will handle the hash jump
+        if (!window.location.hash) {
+            window.scrollTo(0, 0);
+        }
     }, [pathname]);
 
     return (
