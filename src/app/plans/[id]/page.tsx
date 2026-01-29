@@ -18,7 +18,13 @@ import {
     Database,
     Route,
     Server,
-    ZapIcon
+    ZapIcon,
+    Terminal,
+    Box,
+    Sparkles,
+    Layout,
+    Search,
+    Monitor
 } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
@@ -37,6 +43,11 @@ const planData: Record<string, any> = {
             { step: "Audit", desc: "Full performance & SEO audit of current site." },
             { step: "Arch", desc: "Next.js 15 project setup with optimized routing." },
             { step: "Deploy", desc: "Vercel edge deployment with 14-day delivery." }
+        ],
+        details: [
+            { icon: Layout, title: "Responsive Engine", desc: "Pixel-perfect fluid layouts that adapt to any device scale." },
+            { icon: Search, title: "SEO Core", desc: "Static generation for near-instant indexing on search engines." },
+            { icon: Terminal, title: "Next.js 15", desc: "Leveraging React Server Components for minimal bundle sizes." }
         ]
     },
     professional: {
@@ -51,6 +62,11 @@ const planData: Record<string, any> = {
             { step: "Strategy", desc: "Conversion and animation strategy session." },
             { step: "Engine", desc: "Custom CMS & Framer Motion engine build." },
             { step: "Polish", desc: "Refinement & priority support launch." }
+        ],
+        details: [
+            { icon: Sparkles, title: "Advanced FX", desc: "Custom shader-based animations and deep scroll parallax." },
+            { icon: Database, title: "Headless CMS", desc: "Real-time content management via Sanity or Contentful." },
+            { icon: Monitor, title: "CRO Focus", desc: "A/B tested patterns designed to convert visitors to leads." }
         ]
     },
     enterprise: {
@@ -65,6 +81,11 @@ const planData: Record<string, any> = {
             { step: "Consult", desc: "In-depth architecture & scaling consultation." },
             { step: "Build", desc: "Dedicated team development of custom logic." },
             { step: "Scale", desc: "Global infrastructure & database orchestration." }
+        ],
+        details: [
+            { icon: Server, title: "Global Scale", desc: "Multi-region deployment for absolute zero latency." },
+            { icon: Shield, title: "Enterprise Sec", desc: "SOC2-compliant architecture and dynamic auth logic." },
+            { icon: Globe, title: "E-comm Engine", desc: "High-volume checkout systems built on Next.js Commerce." }
         ]
     }
 };
@@ -80,178 +101,174 @@ export default function PlanPage() {
         offset: ["start start", "end end"]
     });
 
-    const bgRotate = useTransform(scrollYProgress, [0, 1], [0, 20]);
-    const bgScale = useTransform(scrollYProgress, [0, 1], [1, 1.4]);
-    const textY = useTransform(scrollYProgress, [0, 1], [0, -150]);
-    const layer2Y = useTransform(scrollYProgress, [0, 1], [0, -300]);
-    const layer3Y = useTransform(scrollYProgress, [0, 1], [0, -500]);
+    const bgRotate = useTransform(scrollYProgress, [0, 1], [0, 45]);
+    const bgScale = useTransform(scrollYProgress, [0, 1], [1, 2]);
+    const pricingY = useTransform(scrollYProgress, [0, 0.4], [0, -100]);
+    const pricingOpacity = useTransform(scrollYProgress, [0, 0.4], [1, 0]);
 
     return (
         <main ref={containerRef} className="min-h-screen bg-black text-white selection:bg-white selection:text-black">
             <Navbar />
 
-            {/* Hero Section with Deep Parallax */}
-            <section className="relative flex min-h-[110vh] flex-col items-center justify-center overflow-hidden px-6 pt-20">
-                {/* Layered Parallax Background */}
+            {/* Hero Section: PRICE IS THE HERO */}
+            <section className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 pt-32">
+                {/* Refractive Parallax Layers */}
                 <motion.div
                     style={{ rotate: bgRotate, scale: bgScale }}
-                    className="absolute top-1/2 left-1/2 -z-20 h-[1000px] w-[1000px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br from-white/[0.04] to-transparent blur-[120px]"
+                    className="absolute top-1/2 left-1/2 -z-20 h-[1200px] w-[1200px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br from-white/[0.05] via-transparent to-transparent blur-[150px]"
                 />
 
                 <motion.div
-                    style={{ y: layer2Y }}
-                    className="absolute top-1/2 left-1/2 -z-10 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 border border-white/5 rounded-full"
-                />
-
-                <motion.div
-                    style={{ y: textY }}
-                    initial={{ opacity: 0, y: 50 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+                    style={{ y: pricingY, opacity: pricingOpacity }}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
                     className="z-10 text-center"
                 >
                     <Link
                         href="/#pricing"
-                        className="group mb-12 inline-flex items-center gap-2 text-[10px] font-black tracking-widest text-white/30 uppercase transition-all hover:text-white"
+                        className="group mb-12 inline-flex items-center gap-2 text-[10px] font-black tracking-[0.4em] text-white/20 uppercase transition-all hover:text-white"
                     >
                         <ArrowLeft className="h-3 w-3 transition-transform group-hover:-translate-x-1" />
-                        Explore Packages
+                        Back to Selection
                     </Link>
 
-                    <div className={`mx-auto mb-8 h-1 w-24 rounded-full ${plan.accent} shadow-[0_0_20px_rgba(255,255,255,0.2)]`} />
-                    <h1 className="mb-4 text-7xl font-black tracking-tighter md:text-[140px] leading-[0.8]">
-                        {plan.name.toUpperCase()} <br />
-                        <span className="text-white/20 italic">EDITION.</span>
-                    </h1>
+                    <motion.div
+                        initial={{ width: 0 }}
+                        animate={{ width: "8rem" }}
+                        transition={{ duration: 1, delay: 0.5 }}
+                        className={`mx-auto mb-12 h-0.5 ${plan.accent} shadow-[0_0_40px_rgba(255,255,255,0.4)]`}
+                    />
 
-                    <div className="mt-8 mb-12 flex flex-col items-center gap-4">
-                        <div className="flex items-baseline gap-2">
-                            <span className="text-5xl font-black tracking-tighter">{plan.price}</span>
-                            {plan.price !== "Custom" && <span className="text-lg font-bold text-white/40">/package</span>}
-                        </div>
-                        <p className="max-w-xl text-xl text-white/40 font-medium italic">
-                            {plan.description}
-                        </p>
+                    <h4 className="text-[12px] font-black tracking-[1em] text-white/30 uppercase mb-8">{plan.tagline}</h4>
+
+                    <div className="relative mb-8">
+                        <h1 className="text-[100px] font-black tracking-tighter md:text-[220px] leading-none text-white transition-all">
+                            {plan.price}
+                        </h1>
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: 1 }}
+                            className="absolute -top-10 -right-10 hidden md:block"
+                        >
+                            <span className="text-xl font-black italic text-white/10 uppercase tracking-widest">{plan.name} PACK.</span>
+                        </motion.div>
                     </div>
 
-                    <motion.div
-                        animate={{ y: [0, 10, 0] }}
-                        transition={{ duration: 2, repeat: Infinity }}
-                        className="mt-20 opacity-20"
-                    >
-                        <div className="h-12 w-6 rounded-full border border-white flex justify-center p-1">
-                            <div className="h-2 w-1 bg-white rounded-full" />
-                        </div>
-                    </motion.div>
+                    <p className="mx-auto max-w-2xl text-xl text-white/50 font-medium italic leading-relaxed">
+                        {plan.description}
+                    </p>
+                </motion.div>
+
+                {/* Mouse Scroll Hint */}
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 0.2 }}
+                    transition={{ delay: 2 }}
+                    className="absolute bottom-10 left-1/2 -translate-x-1/2"
+                >
+                    <div className="h-12 w-6 rounded-full border border-white flex justify-center p-1">
+                        <motion.div
+                            animate={{ y: [0, 10, 0] }}
+                            transition={{ duration: 2, repeat: Infinity }}
+                            className="h-2 w-1 bg-white rounded-full"
+                        />
+                    </div>
                 </motion.div>
             </section>
 
-            {/* Technical Roadmap Cards */}
-            <section className="relative z-10 py-40 bg-[#050505] border-y border-white/5">
+            {/* In-depth Features Grid: "Gem Level" Animation */}
+            <section className="relative z-10 py-32 bg-[#050505]">
                 <div className="mx-auto max-w-7xl px-6">
-                    <div className="mb-24 flex flex-col md:flex-row items-end justify-between gap-8">
-                        <div>
-                            <h4 className="text-[10px] font-black tracking-[0.5em] text-white/20 uppercase mb-4">Technical Track</h4>
-                            <h2 className="text-4xl font-black md:text-6xl tracking-tighter">IMPLEMENTATION <span className="text-white/20">FLOW.</span></h2>
-                        </div>
-                        <p className="max-w-sm text-sm text-white/40 font-medium">A structured roadmap ensuring institutional-grade deployment for every {plan.name} build.</p>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        {plan.roadmap.map((item: any, i: number) => (
+                    <div className="grid grid-cols-1 gap-12 md:grid-cols-3">
+                        {plan.details.map((detail: any, i: number) => (
                             <motion.div
                                 key={i}
-                                initial={{ opacity: 0, y: 30 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                transition={{ delay: i * 0.2 }}
-                                className="p-10 rounded-[3rem] border border-white/5 bg-white/[0.01] hover:bg-white/[0.03] transition-all group relative overflow-hidden"
+                                initial={{ opacity: 0, scale: 0.95, y: 30 }}
+                                whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                                transition={{ delay: i * 0.2, duration: 0.8 }}
+                                className="group relative overflow-hidden rounded-[2.5rem] border border-white/5 bg-white/[0.01] p-12 transition-all hover:bg-white/[0.03] hover:border-white/10"
                             >
-                                <div className="absolute top-0 right-0 p-8 text-4xl font-black text-white/5">{i + 1}</div>
-                                <h4 className="text-2xl font-black mb-4">{item.step}</h4>
-                                <p className="text-sm text-white/40 leading-relaxed font-medium">{item.desc}</p>
+                                <div className="mb-8 h-12 w-12 rounded-2xl bg-white/5 flex items-center justify-center text-white transition-all group-hover:bg-white group-hover:text-black">
+                                    <detail.icon className="h-6 w-6" />
+                                </div>
+                                <h3 className="text-2xl font-black mb-4 tracking-tighter">{detail.title}</h3>
+                                <p className="text-sm text-white/40 leading-relaxed font-medium">{detail.desc}</p>
                             </motion.div>
                         ))}
                     </div>
                 </div>
             </section>
 
-            {/* Comprehensive Specs */}
-            <section className="relative z-10 py-40 bg-black">
+            {/* Implementation Flow Roadmap */}
+            <section className="relative z-10 py-40 bg-black border-y border-white/5">
                 <div className="mx-auto max-w-7xl px-6">
-                    <div className="grid grid-cols-1 gap-20 lg:grid-cols-2">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
                         <div>
-                            <h2 className="text-4xl font-black tracking-tighter md:text-6xl mb-12">
-                                FEATURE <span className="text-white/20">SPECS.</span>
+                            <h4 className="text-[10px] font-black tracking-[0.5em] text-white/20 uppercase mb-6">Technical Track</h4>
+                            <h2 className="text-5xl font-black md:text-8xl tracking-tighter leading-tight mb-12">
+                                FROM ZERO <br />
+                                <span className="text-white/20 italic">TO DEPLOYED.</span>
                             </h2>
-                            <div className="grid grid-cols-1 gap-6">
-                                {plan.features.map((feature: string, i: number) => (
+                            <div className="space-y-12">
+                                {plan.roadmap.map((item: any, i: number) => (
                                     <motion.div
                                         key={i}
-                                        initial={{ opacity: 0, x: -20 }}
+                                        initial={{ opacity: 0, x: -30 }}
                                         whileInView={{ opacity: 1, x: 0 }}
-                                        transition={{ delay: i * 0.1 }}
-                                        className="flex items-center gap-6 p-6 rounded-3xl border border-white/5 hover:border-white/10 transition-colors"
+                                        transition={{ delay: i * 0.2 }}
+                                        className="flex gap-8 group"
                                     >
-                                        <div className="h-10 w-10 rounded-full bg-white/5 flex items-center justify-center shrink-0">
-                                            <CheckCircle2 className="h-5 w-5 text-white" />
+                                        <div className="text-2xl font-black text-white/10 group-hover:text-white transition-colors">0{i + 1}</div>
+                                        <div>
+                                            <h4 className="text-xl font-black mb-2 uppercase tracking-widest">{item.step}</h4>
+                                            <p className="text-sm text-white/40 font-medium leading-relaxed">{item.desc}</p>
                                         </div>
-                                        <span className="text-xl font-bold tracking-tight text-white/80">{feature}</span>
                                     </motion.div>
                                 ))}
                             </div>
                         </div>
 
-                        <div className="space-y-4">
-                            {[
-                                { icon: Code2, title: "Modern Stack", text: "React 19, Next.js 15, and TailWind 4." },
-                                { icon: Server, title: "Edge Ready", text: "Globally distributed infrastructure." },
-                                { icon: Database, title: "CMS Flexible", text: "Sanity, Contentful, or custom SQL." },
-                                { icon: Route, title: "SEO Driven", text: "Programmatic metadata and sitemaps." }
-                            ].map((item, i) => (
-                                <motion.div
-                                    key={i}
-                                    initial={{ opacity: 0, y: 20 }}
-                                    whileInView={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: i * 0.2 }}
-                                    className="p-8 rounded-[2rem] border border-white/5 bg-white/[0.01] hover:bg-white/[0.03] transition-all group"
-                                >
-                                    <div className="flex items-center gap-6">
-                                        <div className="h-12 w-12 rounded-2xl bg-white/5 flex items-center justify-center transition-colors group-hover:bg-white group-hover:text-black shadow-[0_0_20px_rgba(255,255,255,0)] group-hover:shadow-[0_0_20px_rgba(255,255,255,0.2)]">
-                                            <item.icon className="h-6 w-6" />
+                        {/* Visual Spec Card */}
+                        <motion.div
+                            initial={{ opacity: 0, rotateY: 20 }}
+                            whileInView={{ opacity: 1, rotateY: 0 }}
+                            className="relative perspective-1000"
+                        >
+                            <div className="rounded-[3rem] border border-white/10 bg-gradient-to-br from-white/[0.05] to-transparent p-12 backdrop-blur-3xl shadow-2xl">
+                                <h4 className="text-[10px] font-black tracking-[0.4em] text-white/40 uppercase mb-10">Institutional Specs</h4>
+                                <div className="space-y-6">
+                                    {plan.features.map((feature: string, i: number) => (
+                                        <div key={i} className="flex items-center gap-4 justify-between border-b border-white/5 pb-6 last:border-0 last:pb-0">
+                                            <span className="text-sm font-bold text-white/80">{feature}</span>
+                                            <CheckCircle2 className="h-4 w-4 text-green-500/50" />
                                         </div>
-                                        <div>
-                                            <h4 className="text-xl font-black mb-1">{item.title}</h4>
-                                            <p className="text-sm text-white/40 font-medium">{item.text}</p>
-                                        </div>
-                                    </div>
-                                </motion.div>
-                            ))}
-                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </motion.div>
                     </div>
                 </div>
             </section>
 
-            {/* Premium CTA */}
+            {/* Final CTA: Refractive Gem */}
             <section className="py-40 bg-white text-black overflow-hidden relative">
-                <motion.div
-                    style={{ y: layer3Y }}
-                    className="absolute top-0 left-0 w-full h-full bg-[#f0f0f0] -z-10"
-                />
-                <div className="mx-auto max-w-4xl px-6 text-center">
+                <div className="mx-auto max-w-5xl px-6 text-center">
                     <motion.div
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        whileInView={{ opacity: 1, scale: 1 }}
+                        initial={{ opacity: 0, y: 50 }}
+                        whileInView={{ opacity: 1, y: 0 }}
                         transition={{ duration: 1 }}
                     >
-                        <h2 className="text-6xl md:text-[120px] font-black tracking-tighter leading-[0.8] mb-12">
-                            AWAKEN <br />
-                            <span className="italic text-neutral-300 underline decoration-black decoration-[8px]">DIGITAL.</span>
+                        <h2 className="text-7xl md:text-[140px] font-black tracking-tighter leading-[0.8] mb-16">
+                            ACTIVATE <br />
+                            <span className="italic text-neutral-300">AUTHORITY.</span>
                         </h2>
                         <Link
                             href="/contact"
-                            className="inline-flex items-center justify-center rounded-full bg-black px-12 py-6 text-sm font-black text-white hover:scale-105 active:scale-95 transition-transform shadow-[0_30px_60px_rgba(0,0,0,0.3)]"
+                            className="inline-flex items-center justify-center rounded-full bg-black px-16 py-8 text-xs font-black tracking-[0.2em] text-white hover:scale-105 active:scale-95 transition-transform shadow-[0_40px_80px_rgba(0,0,0,0.4)] uppercase"
                         >
-                            START YOUR LIFT
+                            GET IN TOUCH
                         </Link>
                     </motion.div>
                 </div>

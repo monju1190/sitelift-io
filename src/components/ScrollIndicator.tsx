@@ -6,25 +6,9 @@ import { useEffect, useState } from "react";
 
 export function ScrollIndicator() {
     const [isVisible, setIsVisible] = useState(false);
-    const { scrollY } = useScroll();
-
-    // Calculate progress for the ring
-    const [maxScroll, setMaxScroll] = useState(0);
+    const { scrollYProgress } = useScroll();
 
     useEffect(() => {
-        const updateMaxScroll = () => {
-            const height = document.documentElement.scrollHeight - window.innerHeight;
-            setMaxScroll(height);
-        };
-
-        updateMaxScroll();
-
-        // Polling as a fallback for dynamic content height changes
-        const interval = setInterval(updateMaxScroll, 2000);
-
-        window.addEventListener("resize", updateMaxScroll);
-        window.addEventListener("scroll", updateMaxScroll, { passive: true });
-
         const toggleVisibility = () => {
             setIsVisible(window.scrollY > 300);
         };
@@ -32,16 +16,13 @@ export function ScrollIndicator() {
         window.addEventListener("scroll", toggleVisibility, { passive: true });
 
         return () => {
-            clearInterval(interval);
-            window.removeEventListener("resize", updateMaxScroll);
-            window.removeEventListener("scroll", updateMaxScroll);
             window.removeEventListener("scroll", toggleVisibility);
         };
     }, []);
 
     const strokeDashoffset = useTransform(
-        scrollY,
-        [0, maxScroll || 1],
+        scrollYProgress,
+        [0, 1],
         [188.4, 0]
     );
 

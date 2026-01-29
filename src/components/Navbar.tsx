@@ -3,7 +3,7 @@
 import { motion, useScroll, useMotionValueEvent, AnimatePresence, useSpring, useMotionValue, useTransform } from "framer-motion";
 import { useState, useRef, useEffect, useMemo } from "react";
 import Link from "next/link";
-import { ArrowUpRight, Menu, X, Box, Activity, Cpu, Globe } from "lucide-react";
+import { ArrowUpRight, Menu, X, Sparkles } from "lucide-react";
 
 const navLinks = [
     { name: "Work", href: "/work" },
@@ -94,35 +94,25 @@ export function Navbar() {
                     transition={{ type: "spring", stiffness: 180, damping: 22 }}
                     style={{ filter: scrolled ? "url(#liquid-gem)" : "none" }}
                     className={`relative flex items-center transition-all duration-700 ${scrolled
-                            ? "gap-3 rounded-[3rem] bg-black/60 backdrop-blur-[40px] border border-white/10 p-2 shadow-[0_40px_100px_rgba(0,0,0,0.9)]"
-                            : "gap-14 px-12 py-6 bg-transparent"
+                        ? "gap-3 rounded-[3rem] bg-black/60 backdrop-blur-[40px] border border-white/10 p-2 shadow-[0_40px_100px_rgba(0,0,0,0.9)]"
+                        : "gap-14 px-12 py-6 bg-transparent"
                         }`}
                 >
-                    {/* Status HUD - Only Scrolled */}
-                    <AnimatePresence>
-                        {scrolled && (
-                            <motion.div
-                                initial={{ opacity: 0, x: -20 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                exit={{ opacity: 0, x: -20 }}
-                                className="hidden items-center gap-6 px-6 border-r border-white/5 md:flex"
-                            >
-                                <div className="flex flex-col gap-0.5">
-                                    <span className="text-[7px] font-black text-white/20 uppercase tracking-[0.3em]">Build</span>
-                                    <span className="text-[9px] font-mono text-white/50">v1.15.0</span>
-                                </div>
-                                <div className="flex flex-col gap-0.5">
-                                    <span className="text-[7px] font-black text-white/20 uppercase tracking-[0.3em]">Lat</span>
-                                    <span className="text-[9px] font-mono text-green-500/50">14ms</span>
-                                </div>
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
-
                     {/* Branding Orb */}
-                    <Link href="/" className="group relative flex h-14 w-14 items-center justify-center overflow-hidden rounded-full bg-white text-black transition-all hover:scale-110 active:scale-95 shadow-[0_0_30px_rgba(255,255,255,0.1)]">
-                        <Box className="relative z-10 h-6 w-6" />
-                        <motion.div className="absolute inset-0 bg-neutral-200" initial={{ y: "100%" }} whileHover={{ y: 0 }} transition={{ duration: 0.3 }} />
+                    <Link href="/" className="group relative flex items-center gap-3">
+                        <div className="relative flex h-14 w-14 items-center justify-center overflow-hidden rounded-full bg-white text-black transition-all hover:scale-110 active:scale-95 shadow-[0_0_30px_rgba(255,255,255,0.1)]">
+                            <Sparkles className="relative z-10 h-6 w-6" />
+                            <motion.div className="absolute inset-0 bg-neutral-200" initial={{ y: "100%" }} whileHover={{ y: 0 }} transition={{ duration: 0.3 }} />
+                        </div>
+                        {!scrolled && (
+                            <motion.span
+                                initial={{ opacity: 0, x: -10 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                className="text-xl font-black tracking-tighter text-white"
+                            >
+                                sitelift
+                            </motion.span>
+                        )}
                     </Link>
 
                     {/* Navigation Items - Magnetic */}
@@ -153,7 +143,7 @@ export function Navbar() {
                             className={`group flex items-center justify-center overflow-hidden rounded-full border bg-white/5 transition-all active:scale-90 ${scrolled ? "h-14 w-14 border-white/20" : "px-10 py-4 border-white/10"
                                 }`}
                         >
-                            <span className={`relative z-10 text-[10px] font-black tracking-widest text-white ${scrolled ? "hidden" : "block"}`}>ACTIVATE</span>
+                            <span className={`relative z-10 text-[10px] font-black tracking-widest text-white ${scrolled ? "hidden" : "block"}`}>GET IN TOUCH</span>
                             <ArrowUpRight className="relative z-10 h-4 w-4 text-white" />
                             <motion.div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity" />
                         </Link>
