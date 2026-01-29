@@ -92,7 +92,7 @@ export function Hero() {
                     className="flex flex-col items-center justify-center gap-6 sm:flex-row mb-32"
                 >
                     <Link
-                        href="/checkout?plan=professional"
+                        href="/free-audit"
                         className="group relative flex items-center justify-center overflow-hidden rounded-full bg-white px-12 py-6 text-sm font-black text-black transition-all hover:scale-[1.02] active:scale-95"
                     >
                         <span className="relative z-10 flex items-center gap-3">
