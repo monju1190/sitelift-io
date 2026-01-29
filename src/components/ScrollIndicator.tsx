@@ -11,29 +11,30 @@ export function ScrollIndicator() {
     // Calculate progress for the ring
     const [maxScroll, setMaxScroll] = useState(0);
 
-    // Initial mount effect to set max scroll and listen for resize
     useEffect(() => {
         const updateMaxScroll = () => {
-            if (typeof window !== "undefined") {
-                setMaxScroll(document.documentElement.scrollHeight - window.innerHeight);
-            }
+            const height = document.documentElement.scrollHeight - window.innerHeight;
+            setMaxScroll(height);
         };
+
         updateMaxScroll();
-        window.addEventListener("resize", updateMaxScroll);
 
-        // Also listen for scroll to toggle visibility
+        // Polling as a fallback for dynamic content height changes
+        const interval = setInterval(updateMaxScroll, 2000);
+
+        window.addEventListener("resize", updateMaxScroll);
+        window.addEventListener("scroll", updateMaxScroll, { passive: true });
+
         const toggleVisibility = () => {
-            if (window.scrollY > 500) {
-                setIsVisible(true);
-            } else {
-                setIsVisible(false);
-            }
+            setIsVisible(window.scrollY > 300);
         };
 
-        window.addEventListener("scroll", toggleVisibility);
+        window.addEventListener("scroll", toggleVisibility, { passive: true });
 
         return () => {
+            clearInterval(interval);
             window.removeEventListener("resize", updateMaxScroll);
+            window.removeEventListener("scroll", updateMaxScroll);
             window.removeEventListener("scroll", toggleVisibility);
         };
     }, []);
