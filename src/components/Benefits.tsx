@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useMotionValue, useSpring } from "framer-motion";
 import { useRef } from "react";
 import { Zap, Shield, Search, Smartphone } from "lucide-react";
 
@@ -118,52 +118,116 @@ export function Benefits() {
                 <div className="grid grid-cols-1 gap-px bg-white/10 overflow-hidden rounded-[2.5rem] border border-white/10">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
                         {benefits.map((benefit, i) => (
-                            <motion.div
-                                key={i}
-                                initial={{ opacity: 0, y: 40 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                whileHover={{
-                                    y: -8,
-                                    scale: 1.01,
-                                    backgroundColor: "rgba(255, 255, 255, 0.03)",
-                                    boxShadow: "0 20px 40px rgba(0,0,0,0.4)"
-                                }}
-                                transition={{ duration: 0.5, delay: i * 0.05, ease: [0.16, 1, 0.3, 1] }}
-                                viewport={{ once: true }}
-                                className="group relative bg-[#050505] p-10 transition-all duration-500 cursor-default"
-                            >
-                                <div className="mb-12 flex items-center justify-between">
-                                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-black transition-all duration-700 group-hover:scale-110 group-hover:rotate-12 group-hover:shadow-[0_0_20px_rgba(255,255,255,0.4)]">
-                                        <benefit.icon className="h-5 w-5" />
-                                    </div>
-                                    <div className="text-right">
-                                        <motion.div
-                                            whileHover={{ scale: 1.1 }}
-                                            className="text-2xl font-black tracking-tighter text-white"
-                                        >
-                                            {benefit.stat}
-                                        </motion.div>
-                                        <div className="text-[9px] font-black tracking-widest text-white/40 uppercase">{benefit.label}</div>
-                                    </div>
-                                </div>
-
-                                <div className="space-y-4">
-                                    <div>
-                                        <h4 className="text-[10px] font-black tracking-[0.2em] text-white/40 uppercase mb-1">{benefit.subtitle}</h4>
-                                        <h3 className="text-2xl font-bold tracking-tight text-white">{benefit.title}</h3>
-                                    </div>
-                                    <p className="text-sm text-white/60 leading-relaxed font-medium">
-                                        {benefit.description}
-                                    </p>
-                                </div>
-
-                                {/* Decorative hover line */}
-                                <div className="absolute bottom-0 left-0 h-[2px] w-0 bg-white transition-all duration-700 group-hover:w-full" />
-                            </motion.div>
+                            <BenefitCard key={i} benefit={benefit} index={i} />
                         ))}
                     </div>
                 </div>
             </div>
         </section>
+    );
+}
+
+function BenefitCard({ benefit, index }: { benefit: any, index: number }) {
+    const cardRef = useRef<HTMLDivElement>(null);
+    const x = useMotionValue(0);
+    const y = useMotionValue(0);
+
+    const mouseX = useMotionValue(0);
+    const mouseY = useMotionValue(0);
+
+    const springConfig = { damping: 25, stiffness: 150 };
+    const rotateX = useSpring(useTransform(y, [0, 400], [10, -10]), springConfig);
+    const rotateY = useSpring(useTransform(x, [0, 400], [-10, 10]), springConfig);
+
+    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+        if (!cardRef.current) return;
+        const rect = cardRef.current.getBoundingClientRect();
+        const width = rect.width;
+        const height = rect.height;
+        const mouseXPos = e.clientX - rect.left;
+        const mouseYPos = e.clientY - rect.top;
+
+        x.set(mouseXPos);
+        y.set(mouseYPos);
+
+        mouseX.set(mouseXPos);
+        mouseY.set(mouseYPos);
+    };
+
+    const handleMouseLeave = () => {
+        x.set(200);
+        y.set(200);
+    };
+
+    return (
+        <motion.div
+            ref={cardRef}
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: index * 0.05, ease: [0.16, 1, 0.3, 1] }}
+            viewport={{ once: true }}
+            style={{
+                perspective: 1000,
+            }}
+            className="group relative bg-[#050505] p-10 cursor-default overflow-hidden"
+        >
+            <motion.div
+                style={{
+                    rotateX,
+                    rotateY,
+                    transformStyle: "preserve-3d",
+                }}
+                className="relative z-10 space-y-12"
+            >
+                {/* Content */}
+                <div className="flex items-center justify-between" style={{ transform: "translateZ(50px)" }}>
+                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-black transition-all duration-700 group-hover:scale-110 group-hover:rotate-12 group-hover:shadow-[0_0_20px_rgba(255,255,255,0.4)]">
+                        <benefit.icon className="h-5 w-5" />
+                    </div>
+                    <div className="text-right">
+                        <div className="text-2xl font-black tracking-tighter text-white">
+                            {benefit.stat}
+                        </div>
+                        <div className="text-[9px] font-black tracking-widest text-white/40 uppercase">{benefit.label}</div>
+                    </div>
+                </div>
+
+                <div className="space-y-4" style={{ transform: "translateZ(40px)" }}>
+                    <div>
+                        <h4 className="text-[10px] font-black tracking-[0.2em] text-white/40 uppercase mb-1">{benefit.subtitle}</h4>
+                        <h3 className="text-2xl font-bold tracking-tight text-white">{benefit.title}</h3>
+                    </div>
+                    <p className="text-sm text-white/60 leading-relaxed font-medium">
+                        {benefit.description}
+                    </p>
+                </div>
+            </motion.div>
+
+            {/* Refractive Light Layer */}
+            <motion.div
+                className="pointer-events-none absolute -inset-px opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                style={{
+                    background: useTransform(
+                        [mouseX, mouseY],
+                        ([xPos, yPos]) => `radial-gradient(600px circle at ${xPos}px ${yPos}px, rgba(255,255,255,0.06), transparent 80%)`
+                    ),
+                }}
+            />
+
+            <motion.div
+                className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-700"
+                style={{
+                    background: useTransform(
+                        [mouseX, mouseY],
+                        ([xPos, yPos]: any[]) => `linear-gradient(${Math.atan2(yPos - 200, xPos - 200) * (180 / Math.PI)}deg, transparent 40%, rgba(255,255,255,0.2) 50%, transparent 60%)`
+                    ),
+                }}
+            />
+
+            {/* Decorative bottom glow */}
+            <div className="absolute bottom-0 left-0 h-[2px] w-0 bg-gradient-to-r from-transparent via-white/40 to-transparent transition-all duration-1000 group-hover:w-full" />
+        </motion.div>
     );
 }

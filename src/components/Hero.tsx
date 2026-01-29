@@ -109,7 +109,7 @@ export function Hero() {
                     </Link>
                 </motion.div>
 
-                {/* Metrics Bar - Fixed Overlap with Margin/Padding */}
+                {/* Metrics Bar - Gem Level High Fidelity */}
                 <motion.div
                     variants={itemVariants}
                     className="grid grid-cols-2 gap-px overflow-hidden rounded-3xl border border-white/10 bg-white/5 backdrop-blur-md md:grid-cols-4"
@@ -120,15 +120,7 @@ export function Hero() {
                         { label: "Global Edge", value: "Enabled", icon: Globe },
                         { label: "Search Ranking", value: "Top 3", icon: BarChart3 },
                     ].map((stat, i) => (
-                        <motion.div
-                            key={i}
-                            whileHover={{ y: -5, backgroundColor: "rgba(255, 255, 255, 0.05)" }}
-                            className="flex flex-col items-center justify-center gap-2 p-8 bg-black/40 transition-colors group cursor-default"
-                        >
-                            <stat.icon className="h-4 w-4 text-muted-foreground group-hover:text-white group-hover:scale-110 transition-all duration-300" />
-                            <span className="text-2xl font-bold tracking-tighter text-white group-hover:text-white transition-colors">{stat.value}</span>
-                            <span className="text-[10px] font-black tracking-widest text-muted-foreground uppercase group-hover:text-white/60 transition-colors">{stat.label}</span>
-                        </motion.div>
+                        <MetricItem key={i} stat={stat} />
                     ))}
                 </motion.div>
             </motion.div>
@@ -152,5 +144,79 @@ export function Hero() {
                 </div>
             </motion.div>
         </section>
+    );
+}
+
+function MetricItem({ stat }: { stat: any }) {
+    const ref = useRef<HTMLDivElement>(null);
+    const mouseX = useMotionValue(0);
+    const mouseY = useMotionValue(0);
+
+    const springConfig = { damping: 20, stiffness: 200 };
+    const iconX = useSpring(useMotionValue(0), springConfig);
+    const iconY = useSpring(useMotionValue(0), springConfig);
+
+    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+        if (!ref.current) return;
+        const rect = ref.current.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        mouseX.set(x);
+        mouseY.set(y);
+
+        // Magnetic effect for icon
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        iconX.set((x - centerX) * 0.15);
+        iconY.set((y - centerY) * 0.15);
+    };
+
+    const handleMouseLeave = () => {
+        iconX.set(0);
+        iconY.set(0);
+    };
+
+    return (
+        <motion.div
+            ref={ref}
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
+            whileHover={{ y: -5 }}
+            className="flex flex-col items-center justify-center gap-2 p-10 bg-black/40 transition-colors group cursor-default relative overflow-hidden"
+        >
+            {/* SpotLight Effect */}
+            <motion.div
+                className="pointer-events-none absolute -inset-px opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                style={{
+                    background: useTransform(
+                        [mouseX, mouseY],
+                        ([x, y]) => `radial-gradient(400px circle at ${x}px ${y}px, rgba(255,255,255,0.08), transparent 80%)`
+                    ),
+                }}
+            />
+
+            {/* Shimmer Sweep */}
+            <div className="absolute inset-0 opacity-0 group-hover:animate-shimmer pointer-events-none">
+                <div className="h-full w-20 bg-gradient-to-r from-transparent via-white/5 to-transparent skew-x-[-20deg] absolute -left-full top-0" />
+            </div>
+
+            <motion.div
+                style={{ x: iconX, y: iconY }}
+                className="mb-1 pointer-events-none"
+            >
+                <stat.icon className="h-5 w-5 text-white/20 group-hover:text-white group-hover:scale-125 transition-all duration-500 drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]" />
+            </motion.div>
+
+            <span className="text-3xl font-black tracking-tighter text-white/90 group-hover:text-white transition-colors relative z-10 drop-shadow-sm">
+                {stat.value}
+            </span>
+            <span className="text-[10px] font-black tracking-[0.2em] text-white/20 uppercase group-hover:text-white/60 transition-colors relative z-10">
+                {stat.label}
+            </span>
+
+            {/* Glowing Border Bottom */}
+            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 h-[1px] w-0 bg-white/20 group-hover:w-full transition-all duration-700" />
+        </motion.div>
     );
 }

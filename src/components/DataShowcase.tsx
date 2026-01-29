@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useMotionValue, useSpring } from "framer-motion";
 import { useRef } from "react";
 import { TrendingUp, Users, Rocket, Award } from "lucide-react";
 
@@ -92,34 +92,7 @@ export function DataShowcase() {
                         {/* Metrics Grid */}
                         <div className="grid grid-cols-2 gap-4">
                             {metrics.map((metric, i) => (
-                                <motion.div
-                                    key={i}
-                                    initial={{ opacity: 0, y: 30 }}
-                                    whileInView={{ opacity: 1, y: 0 }}
-                                    whileHover={{
-                                        y: -5,
-                                        scale: 1.02,
-                                        backgroundColor: "rgba(255, 255, 255, 0.05)",
-                                        borderColor: "rgba(255, 255, 255, 0.15)"
-                                    }}
-                                    transition={{
-                                        duration: 0.6,
-                                        delay: 0.2 + i * 0.05,
-                                        ease: [0.16, 1, 0.3, 1]
-                                    }}
-                                    viewport={{ once: true }}
-                                    className="group relative rounded-3xl border border-white/5 bg-white/[0.02] p-6 transition-all duration-500 cursor-default"
-                                >
-                                    <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-white text-black transition-all duration-700 group-hover:scale-110 group-hover:rotate-12 group-hover:shadow-[0_0_15px_rgba(255,255,255,0.3)]">
-                                        <metric.icon className="h-5 w-5" />
-                                    </div>
-                                    <div className="text-4xl font-black tracking-tighter text-white mb-1 group-hover:text-white transition-colors">
-                                        {metric.value}
-                                    </div>
-                                    <div className="text-[10px] font-bold tracking-widest text-white/40 uppercase group-hover:text-white/60 transition-colors">
-                                        {metric.label}
-                                    </div>
-                                </motion.div>
+                                <DataMetricCard key={i} metric={metric} index={i} />
                             ))}
                         </div>
                     </div>
@@ -148,30 +121,7 @@ export function DataShowcase() {
                                     {/* Floating Metrics */}
                                     <div className="relative space-y-6">
                                         {metrics.map((metric, i) => (
-                                            <motion.div
-                                                key={i}
-                                                initial={{ opacity: 0, x: 50 }}
-                                                whileInView={{ opacity: 1, x: 0 }}
-                                                transition={{
-                                                    duration: 0.6,
-                                                    delay: i * 0.08,
-                                                    ease: [0.16, 1, 0.3, 1]
-                                                }}
-                                                viewport={{ once: false, amount: 0.3 }}
-                                                className="group flex items-center gap-6 rounded-2xl border border-white/5 bg-white/[0.02] p-5 backdrop-blur-sm hover:bg-white/[0.05] transition-all duration-500"
-                                            >
-                                                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white text-black transition-transform group-hover:rotate-12">
-                                                    <metric.icon className="h-6 w-6" />
-                                                </div>
-                                                <div className="flex-1">
-                                                    <div className="text-2xl font-black tracking-tighter text-white">
-                                                        {metric.value}
-                                                    </div>
-                                                    <div className="text-[9px] font-black tracking-widest text-white/30 uppercase">
-                                                        {metric.label}
-                                                    </div>
-                                                </div>
-                                            </motion.div>
+                                            <DataMetricCard key={i} metric={metric} index={i} isFloating />
                                         ))}
                                     </div>
 
@@ -198,5 +148,74 @@ export function DataShowcase() {
             {/* Background Gradient */}
             <div className="absolute top-1/2 left-1/2 -z-10 h-[1000px] w-[1000px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/[0.01] blur-[120px]" />
         </section>
+    );
+}
+
+function DataMetricCard({ metric, index, isFloating = false }: { metric: any, index: number, isFloating?: boolean }) {
+    const cardRef = useRef<HTMLDivElement>(null);
+    const mouseX = useMotionValue(0);
+    const mouseY = useMotionValue(0);
+
+    const springConfig = { damping: 20, stiffness: 200 };
+    const glowX = useSpring(mouseX, springConfig);
+    const glowY = useSpring(mouseY, springConfig);
+
+    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+        if (!cardRef.current) return;
+        const rect = cardRef.current.getBoundingClientRect();
+        mouseX.set(e.clientX - rect.left);
+        mouseY.set(e.clientY - rect.top);
+    };
+
+    return (
+        <motion.div
+            ref={cardRef}
+            onMouseMove={handleMouseMove}
+            initial={isFloating ? { opacity: 0, x: 50 } : { opacity: 0, y: 30 }}
+            whileInView={isFloating ? { opacity: 1, x: 0 } : { opacity: 1, y: 0 }}
+            whileHover={{ y: -5, scale: 1.02 }}
+            transition={{
+                duration: 0.6,
+                delay: isFloating ? index * 0.08 : 0.2 + index * 0.05,
+                ease: [0.16, 1, 0.3, 1]
+            }}
+            viewport={{ once: !isFloating, amount: 0.3 }}
+            className={`group relative rounded-3xl border border-white/5 bg-white/[0.02] transition-all duration-500 cursor-default overflow-hidden ${isFloating ? "flex items-center gap-6 p-5 backdrop-blur-sm" : "p-6"}`}
+        >
+            {/* Liquid Glow Effect */}
+            <motion.div
+                className="pointer-events-none absolute -inset-px opacity-0 group-hover:opacity-100 transition-opacity duration-700"
+                style={{
+                    background: useTransform(
+                        [glowX, glowY],
+                        ([x, y]: any[]) => `radial-gradient(300px circle at ${x}px ${y}px, rgba(255,255,255,0.04), transparent 80%)`
+                    ),
+                }}
+            />
+
+            <div className={`${isFloating ? "flex h-12 w-12 shrink-0" : "mb-4 flex h-10 w-10"} items-center justify-center rounded-xl bg-white text-black transition-all duration-700 group-hover:scale-110 group-hover:rotate-12 group-hover:shadow-[0_0_15px_rgba(255,255,255,0.3)]`}>
+                <metric.icon className={`${isFloating ? "h-6 w-6" : "h-5 w-5"}`} />
+            </div>
+
+            <div className={isFloating ? "flex-1" : ""}>
+                <div className={`${isFloating ? "text-2xl" : "text-4xl"} font-black tracking-tighter text-white mb-1 group-hover:text-white transition-colors relative z-10`}>
+                    {metric.value}
+                </div>
+                <div className={`${isFloating ? "text-[9px]" : "text-[10px]"} font-bold tracking-widest text-white/40 uppercase group-hover:text-white/60 transition-colors relative z-10`}>
+                    {metric.label}
+                </div>
+            </div>
+
+            {/* Refractive border glow */}
+            <motion.div
+                className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                style={{
+                    boxShadow: useTransform(
+                        [glowX, glowY],
+                        ([x, y]: any[]) => `inset 1px 1px 5px rgba(255,255,255,0.1), inset -1px -1px 5px rgba(255,255,255,0.05)`
+                    ),
+                }}
+            />
+        </motion.div>
     );
 }
