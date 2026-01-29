@@ -29,7 +29,7 @@ export function FAQ() {
     return (
         <section id="faq" className="px-6 py-40 border-t border-white/5">
             <div className="mx-auto max-w-4xl">
-                <div className="mb-24 text-center">
+                <div className="mb-16 md:mb-24 text-center">
                     <motion.div
                         initial={{ opacity: 0, scale: 0.9 }}
                         whileInView={{ opacity: 1, scale: 1 }}
@@ -38,7 +38,7 @@ export function FAQ() {
                     >
                         Knowledge Base
                     </motion.div>
-                    <h2 className="text-5xl font-extrabold tracking-tight md:text-8xl">
+                    <h2 className="text-3xl font-extrabold tracking-tight md:text-8xl">
                         COMMON <span className="text-white/20 italic">QUERIES</span>
                     </h2>
                 </div>

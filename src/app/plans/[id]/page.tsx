@@ -140,10 +140,10 @@ export default function PlanPage() {
                         className={`mx-auto mb-12 h-0.5 ${plan.accent} shadow-[0_0_40px_rgba(255,255,255,0.4)]`}
                     />
 
-                    <h4 className="text-[12px] font-black tracking-[1em] text-white/30 uppercase mb-8">{plan.tagline}</h4>
+                    <h4 className="text-[12px] font-black tracking-[1em] text-white/30 uppercase mb-4 md:mb-8">{plan.tagline}</h4>
 
                     <div className="relative mb-8">
-                        <h1 className="text-[100px] font-black tracking-tighter md:text-[220px] leading-none text-white transition-all">
+                        <h1 className="text-[60px] font-black tracking-tighter md:text-[220px] leading-none text-white transition-all">
                             {plan.price}
                         </h1>
                         <motion.div
@@ -260,7 +260,7 @@ export default function PlanPage() {
                         whileInView={{ opacity: 1, y: 0 }}
                         transition={{ duration: 1 }}
                     >
-                        <h2 className="text-7xl md:text-[140px] font-black tracking-tighter leading-[0.8] mb-16">
+                        <h2 className="text-4xl md:text-[140px] font-black tracking-tighter leading-[0.8] mb-16 px-4">
                             ACTIVATE <br />
                             <span className="italic text-neutral-300">AUTHORITY.</span>
                         </h2>

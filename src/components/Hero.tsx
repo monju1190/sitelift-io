@@ -74,10 +74,10 @@ export function Hero() {
 
                 <motion.h1
                     variants={itemVariants}
-                    className="mb-8 text-7xl font-bold tracking-[-0.04em] md:text-[11rem] md:leading-[0.95] text-white"
+                    className="mb-8 text-4xl font-bold tracking-[-0.04em] md:text-[11rem] md:leading-[0.95] text-white"
                 >
-                    LIFT YOUR <br />
-                    <span className="text-muted-foreground/30">NEXT.JS</span> SITE
+                    LIFT YOUR SITE <br />
+                    <span className="text-muted-foreground/30 uppercase">TO NEXT.JS</span>
                 </motion.h1>
 
                 <motion.p
@@ -140,7 +140,7 @@ export function Hero() {
                     <span className="text-[10px] font-black tracking-[0.2em] text-white/20 uppercase">Scroll</span>
                     <motion.div
                         animate={{ y: [0, 8, 0] }}
-                        transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], repeat: Infinity }}
                         className="h-10 w-6 rounded-full border border-white/10 flex justify-center p-1"
                     >
                         <div className="h-1.5 w-1.5 rounded-full bg-white/40" />

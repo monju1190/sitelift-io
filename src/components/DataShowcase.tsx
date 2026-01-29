@@ -58,7 +58,7 @@ export function DataShowcase() {
                             <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1 text-[10px] font-black tracking-widest text-white/40 uppercase">
                                 Why Next.js + Sitelift?
                             </div>
-                            <h2 className="text-5xl md:text-8xl font-bold tracking-tight leading-[0.9] mb-8">
+                            <h2 className="text-3xl md:text-8xl font-bold tracking-tight leading-[0.9] mb-8">
                                 THE NUMBERS
                                 <br />
                                 <span className="text-white/30 italic">DON'T LIE</span>
@@ -97,8 +97,8 @@ export function DataShowcase() {
                                     initial={{ opacity: 0, y: 30 }}
                                     whileInView={{ opacity: 1, y: 0 }}
                                     transition={{
-                                        duration: 0.8,
-                                        delay: 0.4 + i * 0.1,
+                                        duration: 0.6,
+                                        delay: 0.2 + i * 0.05,
                                         ease: [0.16, 1, 0.3, 1]
                                     }}
                                     viewport={{ once: true }}
@@ -147,8 +147,8 @@ export function DataShowcase() {
                                                 initial={{ opacity: 0, x: 50 }}
                                                 whileInView={{ opacity: 1, x: 0 }}
                                                 transition={{
-                                                    duration: 1,
-                                                    delay: i * 0.15,
+                                                    duration: 0.6,
+                                                    delay: i * 0.08,
                                                     ease: [0.16, 1, 0.3, 1]
                                                 }}
                                                 viewport={{ once: false, amount: 0.3 }}

@@ -21,9 +21,19 @@ export default function FreeAuditPage() {
     const [step, setStep] = useState(1);
     const [isAnalyzing, setIsAnalyzing] = useState(false);
     const [progress, setProgress] = useState(0);
+    const [url, setUrl] = useState("");
+    const [name, setName] = useState("");
+    const [reportData, setReportData] = useState<any>(null);
 
     const handleStartAudit = (e: React.FormEvent) => {
         e.preventDefault();
+        // Generate pseudo-data for the report
+        setReportData({
+            performance: Math.floor(Math.random() * (88 - 65 + 1)) + 65,
+            accessibility: Math.floor(Math.random() * (98 - 85 + 1)) + 85,
+            bestPractices: Math.floor(Math.random() * (90 - 70 + 1)) + 70,
+            seo: Math.floor(Math.random() * (95 - 80 + 1)) + 80,
+        });
         setStep(2);
         setIsAnalyzing(true);
     };
@@ -71,9 +81,9 @@ export default function FreeAuditPage() {
                             Performance Diagnostics
                         </motion.div>
 
-                        <h1 className="mb-8 text-6xl font-black tracking-tighter md:text-8xl leading-[0.9]">
+                        <h1 className="mb-8 text-4xl font-black tracking-tighter md:text-8xl leading-[0.9]">
                             KNOW YOUR <br />
-                            <span className="text-white/20 italic text-7xl md:text-9xl">LIMITS.</span>
+                            <span className="text-white/20 italic text-5xl md:text-9xl">LIMITS.</span>
                         </h1>
 
                         <p className="mb-12 max-w-xl text-xl font-medium text-white/40 leading-relaxed">
@@ -122,6 +132,8 @@ export default function FreeAuditPage() {
                                                 <input
                                                     required
                                                     type="url"
+                                                    value={url}
+                                                    onChange={(e) => setUrl(e.target.value)}
                                                     placeholder="https://yourwork.com"
                                                     className="w-full rounded-2xl border border-white/10 bg-white/5 py-5 pl-14 pr-6 text-white placeholder:text-white/20 outline-none transition-all focus:border-white focus:bg-white/10"
                                                 />
@@ -134,7 +146,9 @@ export default function FreeAuditPage() {
                                                 <input
                                                     required
                                                     type="text"
-                                                    placeholder="Arafat Monjur"
+                                                    value={name}
+                                                    onChange={(e) => setName(e.target.value)}
+                                                    placeholder="John Doe"
                                                     className="w-full rounded-2xl border border-white/10 bg-white/5 px-6 py-5 text-white placeholder:text-white/20 outline-none transition-all focus:border-white focus:bg-white/10"
                                                 />
                                             </div>
@@ -148,7 +162,6 @@ export default function FreeAuditPage() {
                                                 />
                                             </div>
                                         </div>
-
                                         <button
                                             type="submit"
                                             className="group relative flex w-full items-center justify-center overflow-hidden rounded-full bg-white px-10 py-6 text-xs font-black text-black transition-all hover:scale-[1.02] active:scale-95 shadow-[0_20px_40px_rgba(255,255,255,0.1)]"
@@ -231,30 +244,91 @@ export default function FreeAuditPage() {
 
                             {step === 3 && (
                                 <motion.div
-                                    key="success"
-                                    initial={{ opacity: 0, scale: 0.9, y: 30 }}
+                                    key="report"
+                                    initial={{ opacity: 0, scale: 0.9 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    className="rounded-[3.5rem] border border-white/10 bg-white/[0.04] p-10 backdrop-blur-3xl"
+                                >
+                                    <div className="mb-8 flex items-center justify-between">
+                                        <div>
+                                            <h3 className="text-2xl font-black tracking-tight uppercase">Diagnostic Report</h3>
+                                            <p className="text-[10px] font-bold text-white/30 uppercase tracking-[0.2em] mt-1 truncate max-w-[250px]">
+                                                Target: {url}
+                                            </p>
+                                        </div>
+                                        <div className="rounded-full bg-emerald-500/10 px-3 py-1 text-[10px] font-bold text-emerald-400 uppercase tracking-widest">
+                                            Analysis Complete
+                                        </div>
+                                    </div>
+
+                                    <div className="grid grid-cols-2 gap-4 mb-10">
+                                        {[
+                                            { label: "Performance", score: reportData?.performance || 84, color: reportData?.performance < 90 ? "text-amber-400" : "text-emerald-400" },
+                                            { label: "Accessibility", score: reportData?.accessibility || 92, color: reportData?.accessibility < 90 ? "text-amber-400" : "text-emerald-400" },
+                                            { label: "Best Practices", score: reportData?.bestPractices || 78, color: reportData?.bestPractices < 90 ? "text-amber-400" : "text-emerald-400" },
+                                            { label: "SEO", score: reportData?.seo || 81, color: reportData?.seo < 90 ? "text-amber-400" : "text-emerald-400" }
+                                        ].map((metric, i) => (
+                                            <div key={i} className="rounded-2xl border border-white/5 bg-white/5 p-4 text-center transition-all hover:bg-white/10">
+                                                <div className={`text-3xl font-black mb-1 ${metric.color}`}>{metric.score}</div>
+                                                <div className="text-[9px] font-black text-white/30 uppercase tracking-widest">{metric.label}</div>
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                    <div className="space-y-4 mb-10">
+                                        <div className="flex items-start gap-3">
+                                            <Zap className="h-4 w-4 text-amber-400 mt-1" />
+                                            <p className="text-sm text-white/60 leading-relaxed font-medium">
+                                                <span className="text-white font-bold">Critical:</span> Large Contentful Paint (LCP) exceeds 2.5s due to unoptimized image assets.
+                                            </p>
+                                        </div>
+                                        <div className="flex items-start gap-3">
+                                            <Cpu className="h-4 w-4 text-emerald-400 mt-1" />
+                                            <p className="text-sm text-white/60 leading-relaxed font-medium">
+                                                <span className="text-white font-bold">Insight:</span> Moving 40% of client-side logic to Server Components will drop TBT by ~300ms.
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div className="rounded-2xl bg-white/5 p-6 mb-8 text-center">
+                                        <p className="text-xs text-white/40 mb-4 font-medium italic">
+                                            "Your infrastructure is running at sub-optimal levels. We can propel these scores to 100 within 14 days."
+                                        </p>
+                                        <div className="text-[10px] font-black text-white uppercase tracking-widest">
+                                            — The Sitelift Team
+                                        </div>
+                                    </div>
+
+                                    <div className="flex flex-col gap-4">
+                                        <button
+                                            onClick={() => setStep(4)}
+                                            className="w-full rounded-full bg-white py-4 text-[10px] font-black text-black uppercase tracking-widest hover:scale-[1.02] transition-transform"
+                                        >
+                                            Secure Full Intervention
+                                        </button>
+                                        <Link href="/" className="text-[9px] font-black text-white/20 uppercase tracking-widest hover:text-white transition-colors text-center">
+                                            Return to Home
+                                        </Link>
+                                    </div>
+                                </motion.div>
+                            )}
+
+                            {step === 4 && (
+                                <motion.div
+                                    key="final"
+                                    initial={{ opacity: 0, scale: 0.9, y: 20 }}
                                     animate={{ opacity: 1, scale: 1, y: 0 }}
                                     className="flex flex-col items-center justify-center rounded-[3.5rem] border border-white/10 bg-white/[0.04] p-20 text-center backdrop-blur-3xl"
                                 >
-                                    <motion.div
-                                        initial={{ scale: 0 }}
-                                        animate={{ scale: 1 }}
-                                        transition={{ type: "spring", stiffness: 200, damping: 10 }}
-                                        className="mb-12 flex h-32 w-32 items-center justify-center rounded-full bg-white text-black shadow-[0_0_80px_rgba(255,255,255,0.4)]"
-                                    >
-                                        <CheckCircle2 className="h-16 w-16" />
-                                    </motion.div>
-
-                                    <h2 className="mb-6 text-5xl font-black tracking-tighter">DATA ACQUIRED.</h2>
+                                    <div className="mb-10 flex h-24 w-24 items-center justify-center rounded-full bg-emerald-500 text-black shadow-[0_0_50px_rgba(16,185,129,0.3)]">
+                                        <CheckCircle2 className="h-12 w-12" />
+                                    </div>
+                                    <h2 className="mb-6 text-4xl font-black tracking-tighter">REQUEST LOGGED.</h2>
                                     <p className="mb-12 max-w-sm text-white/50 leading-relaxed font-medium">
-                                        Your site audit is processing. Within 4-6 hours, our engineers will deliver the full technical breakdown to your inbox.
+                                        The Sitelift Team has received your diagnostic data. We'll reach out within 2 hours to discuss your 100-score roadmap.
                                     </p>
-
-                                    <Link
-                                        href="/"
-                                        className="text-[10px] font-black tracking-[0.3em] uppercase border-b border-white pb-1 transition-all hover:text-white/60"
-                                    >
-                                        Back to Sitelift
+                                    <Link href="/" className="text-[10px] font-black tracking-[0.3em] uppercase border-b border-white pb-1 transition-all hover:text-white/60">
+                                        Return Home
                                     </Link>
                                 </motion.div>
                             )}

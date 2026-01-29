@@ -54,7 +54,7 @@ export function Benefits() {
             <div className="absolute top-0 left-0 right-0 pointer-events-none select-none overflow-hidden h-full flex items-center">
                 <motion.div
                     style={{ x: bgTextX }}
-                    className="text-[25vw] font-black text-white/[0.03] whitespace-nowrap leading-none tracking-tighter"
+                    className="hidden md:block text-[25vw] font-black text-white/[0.03] whitespace-nowrap leading-none tracking-tighter"
                 >
                     NEXT.JS EXCELLENCE NEXT.JS EXCELLENCE
                 </motion.div>
@@ -75,7 +75,7 @@ export function Benefits() {
                             initial={{ opacity: 0, y: 30 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-                            className="text-5xl font-bold tracking-tight md:text-8xl leading-[0.9]"
+                            className="text-3xl font-bold tracking-tight md:text-8xl leading-[0.9]"
                         >
                             ENGINEERED FOR <br />
                             <span className="text-white/20">ELITE PERFORMANCE</span>
@@ -122,7 +122,7 @@ export function Benefits() {
                                 key={i}
                                 initial={{ opacity: 0, y: 40 }}
                                 whileInView={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.8, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
+                                transition={{ duration: 0.5, delay: i * 0.05, ease: [0.16, 1, 0.3, 1] }}
                                 viewport={{ once: true }}
                                 className="group relative bg-[#050505] p-10 hover:bg-white/[0.02] transition-colors"
                             >

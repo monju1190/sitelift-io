@@ -10,8 +10,14 @@ export function Showcase() {
         offset: ["start end", "end start"]
     });
 
-    const y1 = useTransform(scrollYProgress, [0, 1], [300, -300]);
-    const y2 = useTransform(scrollYProgress, [0, 1], [500, -500]);
+    const y1 = useTransform(scrollYProgress, [0, 1], [0, 0]); // Base value
+    const y2 = useTransform(scrollYProgress, [0, 1], [0, 0]); // Base value
+
+    // Parallax logic that respects screen size should ideally be done differently in React, 
+    // but I'll provide a cleaner solution by mapping the transforms correctly or using a hook.
+    // For now, I'll just adjust the transforms to be less aggressive.
+    const y1Dynamic = useTransform(scrollYProgress, [0, 1], [100, -100]);
+    const y2Dynamic = useTransform(scrollYProgress, [0, 1], [200, -200]);
     const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
 
     return (
@@ -24,11 +30,11 @@ export function Showcase() {
                     <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1 text-[10px] font-black tracking-widest text-white/40 uppercase">
                         The Next.js Edge
                     </div>
-                    <h2 className="mb-8 text-6xl font-bold tracking-tight md:text-9xl leading-[0.8]">
+                    <h2 className="mb-8 text-4xl font-bold tracking-tight md:text-9xl leading-[0.8]">
                         MODERN <br />
                         <span className="text-white/30 italic">ARCHITECTURE.</span>
                     </h2>
-                    <p className="mx-auto max-w-2xl text-xl text-white/50 leading-relaxed font-medium">
+                    <p className="mx-auto max-w-2xl text-lg md:text-xl text-white/50 leading-relaxed font-medium px-4">
                         We leverage Next.js 15+ and React Server Components to eliminate client-side weight,
                         delivering instant interaction and unmatched SEO authority.
                     </p>
@@ -37,7 +43,7 @@ export function Showcase() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start relative z-20">
                     {/* Performance Info */}
                     <motion.div
-                        style={{ y: y1 }}
+                        style={{ y: y1Dynamic }}
                         className="rounded-3xl border border-white/5 bg-white/[0.02] p-10 backdrop-blur-3xl hover:bg-white/[0.04] transition-all duration-500"
                     >
                         <h4 className="text-[10px] font-black tracking-widest text-white/30 uppercase mb-4">Core Web Vitals</h4>
@@ -62,7 +68,7 @@ export function Showcase() {
 
                     {/* SEO Info */}
                     <motion.div
-                        style={{ y: y2 }}
+                        style={{ y: y2Dynamic }}
                         className="rounded-3xl border border-white/5 bg-white/[0.02] p-10 backdrop-blur-3xl hover:bg-white/[0.04] transition-all duration-500"
                     >
                         <h4 className="text-[10px] font-black tracking-widest text-white/30 uppercase mb-4">SEO Efficiency</h4>

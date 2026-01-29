@@ -123,20 +123,20 @@ export function Navbar() {
                     style={{ filter: scrolled ? "url(#liquid-gem)" : "none" }}
                     className={`relative flex items-center transition-all duration-700 ${scrolled
                         ? "gap-3 rounded-[3rem] bg-black/60 backdrop-blur-[40px] border border-white/10 p-2 shadow-[0_40px_100px_rgba(0,0,0,0.9)]"
-                        : "gap-14 px-12 py-6 bg-transparent"
+                        : "gap-4 md:gap-14 px-6 md:px-12 py-6 bg-transparent"
                         }`}
                 >
                     {/* Branding Orb */}
                     <Link href="/" onClick={handleLogoClick} className="group relative flex items-center gap-3">
-                        <div className="relative flex h-14 w-14 items-center justify-center overflow-hidden rounded-full bg-white text-black transition-all hover:scale-110 active:scale-95 shadow-[0_0_30px_rgba(255,255,255,0.1)]">
-                            <img src="/logo.png" alt="Sitelift Logo" className="relative z-10 h-14 w-14 object-contain scale-[1.5]" />
+                        <div className="relative flex h-10 w-10 md:h-14 md:w-14 items-center justify-center overflow-hidden rounded-full bg-white text-black transition-all hover:scale-110 active:scale-95 shadow-[0_0_30px_rgba(255,255,255,0.1)]">
+                            <img src="/logo.png" alt="Sitelift Logo" className="relative z-10 h-10 w-10 md:h-14 md:w-14 object-contain scale-[1.5]" />
                             <motion.div className="absolute inset-0 bg-neutral-200" initial={{ y: "100%" }} whileHover={{ y: 0 }} transition={{ duration: 0.3 }} />
                         </div>
                         {!scrolled && (
                             <motion.span
                                 initial={{ opacity: 0, x: -10 }}
                                 animate={{ opacity: 1, x: 0 }}
-                                className="text-xl font-black tracking-tighter text-white"
+                                className="text-lg md:text-xl font-black tracking-tighter text-white"
                             >
                                 sitelift
                             </motion.span>

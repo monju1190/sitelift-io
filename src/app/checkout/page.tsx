@@ -43,7 +43,7 @@ function CheckoutContent() {
     };
 
     return (
-        <div className="mx-auto max-w-7xl px-6 py-40">
+        <div className="mx-auto max-w-7xl px-6 py-20 md:py-40">
             <div className="grid grid-cols-1 gap-16 lg:grid-cols-2">
                 {/* Left: Info & Summary */}
                 <motion.div
@@ -58,12 +58,12 @@ function CheckoutContent() {
                     >
                         Secure Checkout
                     </motion.div>
-                    <h1 className="mb-8 text-5xl font-extrabold tracking-tight md:text-7xl">
+                    <h1 className="mb-8 text-3xl font-extrabold tracking-tight md:text-7xl leading-tight">
                         LIFT YOUR <br />
                         <span className="text-white/20 italic">BUSINESS.</span>
                     </h1>
 
-                    <div className="space-y-8 rounded-3xl border border-white/5 bg-white/[0.02] p-10">
+                    <div className="space-y-8 rounded-3xl border border-white/5 bg-white/[0.02] p-6 md:p-10">
                         <div className="flex items-center justify-between border-b border-white/5 pb-6">
                             <div>
                                 <p className="text-sm font-bold text-white/40 uppercase tracking-widest mb-1">Scale Plan</p>
@@ -199,7 +199,7 @@ function CheckoutContent() {
                                             </div>
                                             <h3 className="text-3xl font-bold mb-4">Payment Success</h3>
                                             <p className="text-white/40 mb-10 leading-relaxed">
-                                                Your order has been confirmed. Arafat & Monjur will reach out via email within 2 hours.
+                                                Your order has been confirmed. The Sitelift Team will reach out via email within 2 hours.
                                             </p>
                                             <Link href="/" className="text-xs font-black tracking-widest uppercase border-b border-white hover:text-white/60 transition-colors">
                                                 Return Home

@@ -50,7 +50,7 @@ export function Pricing() {
     return (
         <section id="pricing" className="px-6 py-40 bg-[#050505]">
             <div className="mx-auto max-w-7xl">
-                <div className="mb-32 text-center">
+                <div className="mb-16 md:mb-32 text-center">
                     <motion.div
                         initial={{ opacity: 0, scale: 0.9 }}
                         whileInView={{ opacity: 1, scale: 1 }}
@@ -63,7 +63,7 @@ export function Pricing() {
                         initial={{ opacity: 0, y: 30 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-                        className="mb-8 text-5xl font-extrabold tracking-tight md:text-8xl"
+                        className="mb-8 text-3xl font-extrabold tracking-tight md:text-8xl"
                     >
                         READY TO <span className="text-white/20 italic">SCALE?</span>
                     </motion.h2>
