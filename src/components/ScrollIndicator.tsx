@@ -3,10 +3,12 @@
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import { ArrowUp } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useLenis } from "lenis/react";
 
 export function ScrollIndicator() {
     const [isVisible, setIsVisible] = useState(false);
     const { scrollYProgress } = useScroll();
+    const lenis = useLenis();
 
     useEffect(() => {
         const toggleVisibility = () => {
@@ -27,7 +29,11 @@ export function ScrollIndicator() {
     );
 
     const scrollToTop = () => {
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        if (lenis) {
+            lenis.scrollTo(0, { duration: 1.5 });
+        } else {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
     };
 
     return (

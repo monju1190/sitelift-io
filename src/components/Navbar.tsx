@@ -86,7 +86,7 @@ export function Navbar() {
                 {/* Refractive Prism Glow */}
                 <motion.div
                     style={{ x: springX, y: springY, translateX: "-50%", translateY: "-50%" }}
-                    className="fixed top-0 left-0 -z-20 h-64 w-64 rounded-full bg-gradient-to-br from-blue-500/10 via-purple-500/10 to-transparent blur-[80px] opacity-0 group-hover/nav:opacity-100 transition-opacity duration-1000"
+                    className="fixed top-0 left-0 -z-20 h-64 w-64 rounded-full bg-gradient-to-br from-blue-500/10 via-purple-500/10 to-transparent blur-[80px] opacity-0 group-hover/nav:opacity-100 transition-opacity duration-1000 pointer-events-none"
                 />
 
                 <motion.div
