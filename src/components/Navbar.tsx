@@ -1,10 +1,9 @@
 "use client";
 
-import { motion, useScroll, useMotionValueEvent, AnimatePresence } from "framer-motion";
-import { useState, useRef } from "react";
+import { motion, useScroll, useMotionValueEvent, AnimatePresence, useSpring, useMotionValue } from "framer-motion";
+import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import { ArrowUpRight, Menu, X, Plus } from "lucide-react";
-import { usePathname } from "next/navigation";
+import { ArrowUpRight, Menu, X, Box } from "lucide-react";
 
 const navLinks = [
     { name: "Work", href: "/work" },
@@ -17,134 +16,147 @@ export function Navbar() {
     const { scrollY } = useScroll();
     const [scrolled, setScrolled] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-    const [isHovered, setIsHovered] = useState(false);
-    const pathname = usePathname();
+
+    // Mouse Interaction for "Gem" Flare
+    const mouseX = useMotionValue(0);
+    const mouseY = useMotionValue(0);
+    const springX = useSpring(mouseX, { stiffness: 100, damping: 20 });
+    const springY = useSpring(mouseY, { stiffness: 100, damping: 20 });
+
+    useEffect(() => {
+        const handleMouseMove = (e: MouseEvent) => {
+            const { clientX, clientY } = e;
+            mouseX.set(clientX);
+            mouseY.set(clientY);
+        };
+        window.addEventListener("mousemove", handleMouseMove);
+        return () => window.removeEventListener("mousemove", handleMouseMove);
+    }, [mouseX, mouseY]);
 
     useMotionValueEvent(scrollY, "change", (latest) => {
-        setScrolled(latest > 50);
+        setScrolled(latest > 80);
     });
 
     return (
         <motion.header
             initial={{ y: -100 }}
             animate={{ y: 0 }}
-            className="fixed top-0 left-0 right-0 z-[100] flex justify-center p-6"
+            className="fixed top-0 left-0 right-0 z-[100] flex justify-center p-6 pointer-events-none"
         >
-            <nav className="relative flex items-center">
-                {/* Main Floating Island */}
+            {/* SVG Filter for Liquid Effect */}
+            <svg className="absolute hidden">
+                <defs>
+                    <filter id="liquid-glass">
+                        <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
+                        <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -10" result="goo" />
+                        <feComposite in="SourceGraphic" in2="goo" operator="atop" />
+                    </filter>
+                </defs>
+            </svg>
+
+            <nav className="flex items-center pointer-events-auto relative">
+                {/* Refractive Lens Flare (Follows Mouse) */}
                 <motion.div
-                    onHoverStart={() => setIsHovered(true)}
-                    onHoverEnd={() => setIsHovered(false)}
+                    style={{ x: springX, y: springY, translateX: "-50%", translateY: "-50%" }}
+                    className="fixed top-0 left-0 -z-10 h-32 w-32 rounded-full bg-white/[0.05] blur-2xl pointer-events-none"
+                />
+
+                <motion.div
                     layout
-                    transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                    className={`flex items-center gap-8 rounded-[2.5rem] border bg-black/40 backdrop-blur-3xl transition-all duration-700 ${scrolled
-                            ? "border-white/20 px-4 py-2 shadow-[0_20px_50px_rgba(0,0,0,0.5)]"
-                            : "border-white/5 px-8 py-4"
+                    transition={{
+                        type: "spring",
+                        stiffness: 200,
+                        damping: 25,
+                        mass: 0.5
+                    }}
+                    style={{ filter: scrolled ? "url(#liquid-glass)" : "none" }}
+                    className={`relative flex items-center transition-all duration-700 ${scrolled
+                            ? "gap-2 rounded-[3.5rem] bg-white/[0.03] backdrop-blur-3xl border border-white/10 p-2 shadow-[0_30px_100px_rgba(0,0,0,0.8)]"
+                            : "gap-12 px-12 py-6 bg-transparent border-transparent"
                         }`}
                 >
-                    <Link href="/" className="group flex items-center gap-2 text-2xl font-black tracking-tighter">
-                        <motion.div
-                            animate={{ rotate: scrolled ? 180 : 0 }}
-                            className="flex h-8 w-8 items-center justify-center rounded-full bg-white text-black transition-all group-hover:bg-neutral-200"
-                        >
-                            <Plus className="h-5 w-5" />
-                        </motion.div>
-                        <span className={scrolled ? "hidden md:block" : "block"}>sitelift</span>
-                    </Link>
-
-                    {/* Desktop Links */}
-                    <div className="hidden items-center gap-2 md:flex">
-                        {navLinks.map((link) => (
-                            <Link
-                                key={link.name}
-                                href={link.href}
-                                className="group relative rounded-full px-4 py-2 text-[10px] font-black tracking-widest text-white/40 uppercase transition-all hover:text-white"
-                            >
-                                <span className="relative z-10">{link.name}</span>
-                                <motion.div
-                                    className="absolute inset-0 z-0 rounded-full bg-white/5 opacity-0 transition-opacity group-hover:opacity-100"
-                                />
-                            </Link>
-                        ))}
-                    </div>
-
-                    {/* CTA */}
-                    <Link
-                        href="/contact"
-                        className={`group relative flex items-center justify-center overflow-hidden rounded-full bg-white text-black transition-all hover:scale-105 active:scale-95 ${scrolled ? "h-10 w-10 md:w-auto md:px-6 md:py-2.5" : "px-8 py-3"
-                            }`}
-                    >
-                        <span className={`relative z-10 text-[10px] font-black tracking-widest ${scrolled ? "hidden md:block" : "block"}`}>
-                            LIFT NOW
-                        </span>
-                        <ArrowUpRight className={`relative z-10 ${scrolled ? "h-5 w-5" : "h-4 w-4"}`} />
+                    {/* Brand / Logo Orb */}
+                    <Link href="/" className="group relative flex h-14 w-14 items-center justify-center overflow-hidden rounded-full bg-white text-black transition-transform hover:scale-110 active:scale-90 shadow-[0_10px_30px_rgba(255,255,255,0.2)]">
+                        <Box className="relative z-10 h-6 w-6" />
                         <motion.div
                             className="absolute inset-0 z-0 bg-neutral-200"
                             initial={{ x: "-100%" }}
-                            whileHover={{ x: 0 }}
+                            whileHover={{ x: "0%" }}
                             transition={{ duration: 0.3 }}
                         />
                     </Link>
 
-                    {/* Mobile Toggle */}
-                    <button
-                        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                        className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 md:hidden"
-                    >
-                        {mobileMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
-                    </button>
-                </motion.div>
+                    {/* Navigation Items */}
+                    <AnimatePresence mode="popLayout">
+                        {(!scrolled || mobileMenuOpen) && (
+                            <motion.div
+                                initial={{ opacity: 0, x: 20, scale: 0.8 }}
+                                animate={{ opacity: 1, x: 0, scale: 1 }}
+                                exit={{ opacity: 0, x: 20, scale: 0.8 }}
+                                className="hidden items-center md:flex"
+                            >
+                                {navLinks.map((link) => (
+                                    <Link
+                                        key={link.name}
+                                        href={link.href}
+                                        className="group relative px-6 py-3 text-[10px] font-black tracking-[0.25em] text-white/40 uppercase transition-all hover:text-white"
+                                    >
+                                        <span className="relative z-10">{link.name}</span>
+                                        <motion.div
+                                            className="absolute inset-0 z-0 rounded-full bg-white/5 opacity-0 transition-all group-hover:opacity-100"
+                                            layoutId="nav-hover-active"
+                                        />
+                                    </Link>
+                                ))}
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
 
-                {/* Status Indicator (Only when scrolled) */}
-                <AnimatePresence>
+                    {/* CTA Gem */}
+                    <Link
+                        href="/contact"
+                        className={`group relative flex items-center justify-center overflow-hidden rounded-full border border-white/10 bg-white/5 text-white transition-all hover:bg-white hover:text-black active:scale-95 shadow-[inset_0_0_20px_rgba(255,255,255,0.05)] ${scrolled ? "h-14 w-14" : "px-10 py-4"
+                            }`}
+                    >
+                        <span className={`relative z-10 text-[10px] font-black tracking-widest ${scrolled ? "hidden" : "block"}`}>
+                            CONTACT
+                        </span>
+                        <ArrowUpRight className="relative z-10 h-4 w-4" />
+                    </Link>
+
+                    {/* Mobile Toggle (Only when scrolled) */}
                     {scrolled && (
-                        <motion.div
-                            initial={{ opacity: 0, x: -20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -20 }}
-                            className="absolute -left-32 top-1/2 hidden -translate-y-1/2 items-center gap-2 xl:flex"
+                        <button
+                            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                            className="flex h-14 w-14 items-center justify-center rounded-full border border-white/10 bg-white/5 md:hidden"
                         >
-                            <div className="h-2 w-2 rounded-full bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.5)]" />
-                            <span className="text-[9px] font-black tracking-[0.2em] text-white/30 uppercase leading-none mt-0.5">EST. 2026</span>
-                        </motion.div>
+                            {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+                        </button>
                     )}
-                </AnimatePresence>
+                </motion.div>
             </nav>
 
-            {/* Mobile Menu Overlay */}
+            {/* Expanded Mobile Menu (Crystal Layer) */}
             <AnimatePresence>
                 {mobileMenuOpen && (
                     <motion.div
-                        initial={{ opacity: 0, backdropFilter: "blur(0px)" }}
-                        animate={{ opacity: 1, backdropFilter: "blur(20px)" }}
-                        exit={{ opacity: 0, backdropFilter: "blur(0px)" }}
-                        className="fixed inset-0 z-[-1] bg-black/60 md:hidden"
-                        onClick={() => setMobileMenuOpen(false)}
+                        initial={{ opacity: 0, y: 30, scale: 0.9 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 30, scale: 0.9 }}
+                        className="fixed top-32 left-6 right-6 z-[90] overflow-hidden rounded-[3.5rem] border border-white/10 bg-black/90 p-12 backdrop-blur-[50px] md:hidden shadow-[0_50px_100px_rgba(0,0,0,0.8)]"
                     >
-                        <motion.div
-                            initial={{ y: -50, opacity: 0 }}
-                            animate={{ y: 0, opacity: 1 }}
-                            exit={{ y: -50, opacity: 0 }}
-                            className="flex flex-col items-center justify-center h-full gap-8 p-6"
-                        >
+                        <div className="flex flex-col gap-10">
                             {navLinks.map((link, i) => (
                                 <Link
                                     key={link.name}
                                     href={link.href}
                                     onClick={() => setMobileMenuOpen(false)}
-                                    className="text-5xl font-black tracking-tighter text-white/20 transition-colors hover:text-white"
+                                    className="text-6xl font-black tracking-tighter text-white/20 transition-all hover:text-white hover:translate-x-4"
                                 >
                                     {link.name}
                                 </Link>
                             ))}
-                            <Link
-                                href="/contact"
-                                onClick={() => setMobileMenuOpen(false)}
-                                className="text-5xl font-black tracking-tighter text-white"
-                            >
-                                CONTACT
-                            </Link>
-                        </motion.div>
+                        </div>
                     </motion.div>
                 )}
             </AnimatePresence>
