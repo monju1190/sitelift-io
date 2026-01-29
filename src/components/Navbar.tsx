@@ -101,7 +101,7 @@ export function Navbar() {
                     {/* Branding Orb */}
                     <Link href="/" className="group relative flex items-center gap-3">
                         <div className="relative flex h-14 w-14 items-center justify-center overflow-hidden rounded-full bg-white text-black transition-all hover:scale-110 active:scale-95 shadow-[0_0_30px_rgba(255,255,255,0.1)]">
-                            <img src="/logo.png" alt="Sitelift Logo" className="relative z-10 h-11 w-11 object-contain" />
+                            <img src="/logo.png" alt="Sitelift Logo" className="relative z-10 h-14 w-14 object-contain scale-[1.5]" />
                             <motion.div className="absolute inset-0 bg-neutral-200" initial={{ y: "100%" }} whileHover={{ y: 0 }} transition={{ duration: 0.3 }} />
                         </div>
                         {!scrolled && (
