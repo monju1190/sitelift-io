@@ -122,16 +122,27 @@ export function Benefits() {
                                 key={i}
                                 initial={{ opacity: 0, y: 40 }}
                                 whileInView={{ opacity: 1, y: 0 }}
+                                whileHover={{
+                                    y: -8,
+                                    scale: 1.01,
+                                    backgroundColor: "rgba(255, 255, 255, 0.03)",
+                                    boxShadow: "0 20px 40px rgba(0,0,0,0.4)"
+                                }}
                                 transition={{ duration: 0.5, delay: i * 0.05, ease: [0.16, 1, 0.3, 1] }}
                                 viewport={{ once: true }}
-                                className="group relative bg-[#050505] p-10 hover:bg-white/[0.02] transition-colors"
+                                className="group relative bg-[#050505] p-10 transition-all duration-500 cursor-default"
                             >
                                 <div className="mb-12 flex items-center justify-between">
-                                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-black transition-transform duration-500 group-hover:scale-110 group-hover:rotate-6">
+                                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-black transition-all duration-700 group-hover:scale-110 group-hover:rotate-12 group-hover:shadow-[0_0_20px_rgba(255,255,255,0.4)]">
                                         <benefit.icon className="h-5 w-5" />
                                     </div>
                                     <div className="text-right">
-                                        <div className="text-2xl font-black tracking-tighter text-white">{benefit.stat}</div>
+                                        <motion.div
+                                            whileHover={{ scale: 1.1 }}
+                                            className="text-2xl font-black tracking-tighter text-white"
+                                        >
+                                            {benefit.stat}
+                                        </motion.div>
                                         <div className="text-[9px] font-black tracking-widest text-white/40 uppercase">{benefit.label}</div>
                                     </div>
                                 </div>

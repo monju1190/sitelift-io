@@ -120,11 +120,15 @@ export function Hero() {
                         { label: "Global Edge", value: "Enabled", icon: Globe },
                         { label: "Search Ranking", value: "Top 3", icon: BarChart3 },
                     ].map((stat, i) => (
-                        <div key={i} className="flex flex-col items-center justify-center gap-2 p-8 bg-black/40 hover:bg-white/[0.03] transition-colors group">
-                            <stat.icon className="h-4 w-4 text-muted-foreground group-hover:text-white transition-colors" />
-                            <span className="text-2xl font-bold tracking-tighter text-white">{stat.value}</span>
-                            <span className="text-[10px] font-black tracking-widest text-muted-foreground uppercase">{stat.label}</span>
-                        </div>
+                        <motion.div
+                            key={i}
+                            whileHover={{ y: -5, backgroundColor: "rgba(255, 255, 255, 0.05)" }}
+                            className="flex flex-col items-center justify-center gap-2 p-8 bg-black/40 transition-colors group cursor-default"
+                        >
+                            <stat.icon className="h-4 w-4 text-muted-foreground group-hover:text-white group-hover:scale-110 transition-all duration-300" />
+                            <span className="text-2xl font-bold tracking-tighter text-white group-hover:text-white transition-colors">{stat.value}</span>
+                            <span className="text-[10px] font-black tracking-widest text-muted-foreground uppercase group-hover:text-white/60 transition-colors">{stat.label}</span>
+                        </motion.div>
                     ))}
                 </motion.div>
             </motion.div>

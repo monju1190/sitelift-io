@@ -96,21 +96,27 @@ export function DataShowcase() {
                                     key={i}
                                     initial={{ opacity: 0, y: 30 }}
                                     whileInView={{ opacity: 1, y: 0 }}
+                                    whileHover={{
+                                        y: -5,
+                                        scale: 1.02,
+                                        backgroundColor: "rgba(255, 255, 255, 0.05)",
+                                        borderColor: "rgba(255, 255, 255, 0.15)"
+                                    }}
                                     transition={{
                                         duration: 0.6,
                                         delay: 0.2 + i * 0.05,
                                         ease: [0.16, 1, 0.3, 1]
                                     }}
                                     viewport={{ once: true }}
-                                    className="group relative rounded-3xl border border-white/5 bg-white/[0.02] p-6 hover:bg-white/[0.04] hover:border-white/10 transition-all duration-500"
+                                    className="group relative rounded-3xl border border-white/5 bg-white/[0.02] p-6 transition-all duration-500 cursor-default"
                                 >
-                                    <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-white text-black transition-transform duration-500 group-hover:scale-110 group-hover:rotate-6">
+                                    <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-white text-black transition-all duration-700 group-hover:scale-110 group-hover:rotate-12 group-hover:shadow-[0_0_15px_rgba(255,255,255,0.3)]">
                                         <metric.icon className="h-5 w-5" />
                                     </div>
-                                    <div className="text-4xl font-black tracking-tighter text-white mb-1">
+                                    <div className="text-4xl font-black tracking-tighter text-white mb-1 group-hover:text-white transition-colors">
                                         {metric.value}
                                     </div>
-                                    <div className="text-[10px] font-bold tracking-widest text-white/40 uppercase">
+                                    <div className="text-[10px] font-bold tracking-widest text-white/40 uppercase group-hover:text-white/60 transition-colors">
                                         {metric.label}
                                     </div>
                                 </motion.div>
