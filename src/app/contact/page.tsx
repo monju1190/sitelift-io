@@ -51,8 +51,8 @@ function CustomSelect({ options, name }: { options: string[], name: string }) {
                                     setIsOpen(false);
                                 }}
                                 className={`flex w-full items-center px-4 py-3 text-sm font-bold transition-all rounded-xl ${selected === option
-                                        ? "bg-white text-black"
-                                        : "text-white/40 hover:bg-white/5 hover:text-white"
+                                    ? "bg-white text-black"
+                                    : "text-white/40 hover:bg-white/5 hover:text-white"
                                     }`}
                             >
                                 {option}
@@ -217,13 +217,15 @@ export default function ContactPage() {
                                             <label className="text-[10px] font-black uppercase tracking-widest text-white/40">Message</label>
                                             <textarea name="message" rows={4} placeholder="How can we help?" className="w-full rounded-2xl border border-white/10 bg-transparent px-6 py-4 text-white focus:border-white focus:outline-none transition-colors resize-none" />
                                         </div>
-                                        <button
+                                        <motion.button
+                                            whileHover={{ scale: 1.02 }}
+                                            whileTap={{ scale: 0.98 }}
                                             disabled={formState === "submitting"}
-                                            className="group flex w-full items-center justify-center gap-3 rounded-full bg-white px-8 py-5 text-sm font-black text-black transition-all hover:bg-neutral-200 disabled:opacity-50"
+                                            className="group flex w-full items-center justify-center gap-3 rounded-full bg-white px-8 py-5 text-sm font-black text-black transition-all hover:bg-neutral-200 hover:shadow-[0_20px_40px_rgba(255,255,255,0.2)] disabled:opacity-50"
                                         >
                                             {formState === "submitting" ? "SENDING..." : "SEND MESSAGE"}
                                             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                                        </button>
+                                        </motion.button>
                                     </motion.form>
                                 ) : (
                                     <motion.div

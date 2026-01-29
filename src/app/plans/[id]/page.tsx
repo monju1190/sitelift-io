@@ -127,7 +127,7 @@ export default function PlanPage() {
                 >
                     <Link
                         href="/#pricing"
-                        className="group mb-12 inline-flex items-center gap-2 text-[10px] font-black tracking-[0.4em] text-white/20 uppercase transition-all hover:text-white"
+                        className="group mb-12 inline-flex items-center gap-2 text-[10px] font-black tracking-[0.4em] text-white/20 uppercase transition-all hover:text-white hover:-translate-y-1"
                     >
                         <ArrowLeft className="h-3 w-3 transition-transform group-hover:-translate-x-1" />
                         Back to Selection
@@ -187,14 +187,15 @@ export default function PlanPage() {
                                 key={i}
                                 initial={{ opacity: 0, scale: 0.95, y: 30 }}
                                 whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                                whileHover={{ y: -8, scale: 1.02, backgroundColor: "rgba(255, 255, 255, 0.03)" }}
                                 transition={{ delay: i * 0.2, duration: 0.8 }}
-                                className="group relative overflow-hidden rounded-[2.5rem] border border-white/5 bg-white/[0.01] p-12 transition-all hover:bg-white/[0.03] hover:border-white/10"
+                                className="group relative overflow-hidden rounded-[2.5rem] border border-white/5 bg-white/[0.01] p-12 transition-all cursor-default"
                             >
-                                <div className="mb-8 h-12 w-12 rounded-2xl bg-white/5 flex items-center justify-center text-white transition-all group-hover:bg-white group-hover:text-black">
+                                <div className="mb-8 h-12 w-12 rounded-2xl bg-white/5 flex items-center justify-center text-white transition-all group-hover:bg-white group-hover:text-black group-hover:rotate-12">
                                     <detail.icon className="h-6 w-6" />
                                 </div>
-                                <h3 className="text-2xl font-black mb-4 tracking-tighter">{detail.title}</h3>
-                                <p className="text-sm text-white/40 leading-relaxed font-medium">{detail.desc}</p>
+                                <h3 className="text-2xl font-black mb-4 tracking-tighter transition-colors group-hover:text-white">{detail.title}</h3>
+                                <p className="text-sm text-white/40 leading-relaxed font-medium transition-colors group-hover:text-white/60">{detail.desc}</p>
                             </motion.div>
                         ))}
                     </div>
@@ -264,12 +265,17 @@ export default function PlanPage() {
                             ACTIVATE <br />
                             <span className="italic text-neutral-300">AUTHORITY.</span>
                         </h2>
-                        <Link
-                            href="/contact"
-                            className="inline-flex items-center justify-center rounded-full bg-black px-16 py-8 text-xs font-black tracking-[0.2em] text-white hover:scale-105 active:scale-95 transition-transform shadow-[0_40px_80px_rgba(0,0,0,0.4)] uppercase"
+                        <motion.div
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
                         >
-                            GET IN TOUCH
-                        </Link>
+                            <Link
+                                href="/contact"
+                                className="inline-flex items-center justify-center rounded-full bg-black px-16 py-8 text-xs font-black tracking-[0.2em] text-white transition-all shadow-[0_40px_80px_rgba(0,0,0,0.4)] hover:shadow-[0_20px_40px_rgba(255,255,255,0.1)] uppercase"
+                            >
+                                GET IN TOUCH
+                            </Link>
+                        </motion.div>
                     </motion.div>
                 </div>
             </section>

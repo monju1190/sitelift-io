@@ -34,18 +34,19 @@ export function Testimonials() {
                     className="flex gap-6 whitespace-nowrap"
                 >
                     {[...testimonials, ...testimonials, ...testimonials].map((t, i) => (
-                        <div
+                        <motion.div
                             key={i}
-                            className="w-[350px] shrink-0 rounded-3xl border border-white/10 bg-white/5 p-8"
+                            whileHover={{ y: -10, scale: 1.05, backgroundColor: "rgba(255, 255, 255, 0.08)" }}
+                            className="w-[350px] shrink-0 rounded-3xl border border-white/10 bg-white/5 p-8 transition-all duration-500 cursor-default group"
                         >
-                            <p className="mb-8 text-lg font-medium whitespace-normal leading-relaxed text-neutral-300">
+                            <p className="mb-8 text-lg font-medium whitespace-normal leading-relaxed text-neutral-300 transition-colors group-hover:text-white">
                                 "{t.content}"
                             </p>
                             <div>
-                                <p className="font-bold">{t.name}</p>
-                                <p className="text-sm text-muted-foreground">{t.role}</p>
+                                <p className="font-bold transition-colors group-hover:text-white">{t.name}</p>
+                                <p className="text-sm text-muted-foreground transition-colors group-hover:text-white/60">{t.role}</p>
                             </div>
-                        </div>
+                        </motion.div>
                     ))}
                 </motion.div>
             </div>

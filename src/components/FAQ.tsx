@@ -56,7 +56,7 @@ export function FAQ() {
                                 <span className={`text-2xl font-bold tracking-tight md:text-4xl transition-all duration-500 ${openIndex === i ? "text-white" : "text-white/40 group-hover:text-white/70"}`}>
                                     {faq.question}
                                 </span>
-                                <div className={`flex h-12 w-12 items-center justify-center rounded-full border transition-all duration-500 ${openIndex === i ? "border-white bg-white text-black rotate-45" : "border-white/10 text-white/40"}`}>
+                                <div className={`flex h-12 w-12 items-center justify-center rounded-full border transition-all duration-700 ${openIndex === i ? "border-white bg-white text-black rotate-45 shadow-[0_0_20px_rgba(255,255,255,0.4)]" : "border-white/10 text-white/40 group-hover:border-white/30 group-hover:text-white/60"}`}>
                                     <Plus className="h-6 w-6" />
                                 </div>
                             </button>

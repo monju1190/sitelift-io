@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Twitter, Linkedin } from "lucide-react";
 
 export function CTA() {
     return (
@@ -59,19 +59,36 @@ export function Footer() {
                         <Link
                             key={item}
                             href={item === "Contact" ? "/contact" : item === "Terms" ? "#" : `/${item.toLowerCase()}`}
-                            className="text-[10px] font-black tracking-widest text-white/30 hover:text-white transition-colors uppercase"
+                            className="group relative text-[10px] font-black tracking-widest text-white/30 hover:text-white transition-all hover:-translate-y-0.5 uppercase"
                         >
                             {item}
+                            <motion.div className="absolute -bottom-1 left-0 h-px w-0 bg-white transition-all group-hover:w-full" />
                         </Link>
                     ))}
                 </div>
 
-                {/* Right: Copyright */}
-                <div className="flex items-center gap-4">
-                    <div className="h-1 w-1 rounded-full bg-green-500/50" />
-                    <p className="text-[9px] font-black tracking-[0.3em] text-white/20 uppercase">
-                        © {currentYear} SITELIFT
-                    </p>
+                {/* Right: Social & Copyright */}
+                <div className="flex flex-col items-center md:items-end gap-6">
+                    <div className="flex items-center gap-6">
+                        {[
+                            { icon: Twitter, href: "#" },
+                            { icon: Linkedin, href: "#" },
+                        ].map((social, i) => (
+                            <Link
+                                key={i}
+                                href={social.href}
+                                className="group relative flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 transition-all hover:scale-110 hover:bg-white hover:text-black"
+                            >
+                                <social.icon className="h-4 w-4" />
+                            </Link>
+                        ))}
+                    </div>
+                    <div className="flex items-center gap-4">
+                        <div className="h-1 w-1 rounded-full bg-green-500/50" />
+                        <p className="text-[9px] font-black tracking-[0.3em] text-white/20 uppercase">
+                            © {currentYear} SITELIFT
+                        </p>
+                    </div>
                 </div>
             </div>
         </footer>

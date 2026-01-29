@@ -53,9 +53,10 @@ export function Founders() {
                             key={founder.name}
                             initial={{ opacity: 0, y: 50 }}
                             whileInView={{ opacity: 1, y: 0 }}
+                            whileHover={{ y: -10, scale: 1.02 }}
                             transition={{ duration: 0.8, delay: i * 0.2, ease: [0.16, 1, 0.3, 1] }}
                             viewport={{ once: true }}
-                            className="group relative flex flex-col items-center bg-white/[0.02] border border-white/5 rounded-[3rem] p-12 text-center hover:bg-white/[0.04] transition-colors"
+                            className="group relative flex flex-col items-center bg-white/[0.02] border border-white/5 rounded-[3rem] p-12 text-center transition-all duration-500 hover:bg-white/[0.04] hover:border-white/10 cursor-default"
                         >
                             <div className="relative mb-8 h-40 w-40 overflow-hidden rounded-full border-4 border-white/10 grayscale group-hover:grayscale-0 transition-all duration-700">
                                 <img

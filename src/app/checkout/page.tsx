@@ -119,14 +119,16 @@ function CheckoutContent() {
                                         <label className="text-[10px] font-black uppercase tracking-widest text-white/40">Email Address</label>
                                         <input type="email" placeholder="john@company.com" className="w-full rounded-2xl border border-white/10 bg-transparent px-6 py-4 text-white placeholder:text-white/20 focus:border-white focus:outline-none transition-colors" />
                                     </div>
-                                    <button
+                                    <motion.button
+                                        whileHover={{ scale: 1.02 }}
+                                        whileTap={{ scale: 0.98 }}
                                         onClick={handleProceed}
                                         disabled={loading}
-                                        className="group mt-10 flex w-full items-center justify-center gap-3 rounded-full bg-white px-8 py-5 text-sm font-black text-black hover:bg-neutral-200 transition-all disabled:opacity-50"
+                                        className="group mt-10 flex w-full items-center justify-center gap-3 rounded-full bg-white px-8 py-5 text-sm font-black text-black hover:bg-neutral-200 hover:shadow-[0_20px_40px_rgba(255,255,255,0.2)] transition-all disabled:opacity-50"
                                     >
                                         {loading ? "INITIALIZING..." : "PROCEED TO PAYMENT"}
                                         <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                                    </button>
+                                    </motion.button>
                                 </div>
                             </motion.div>
                         ) : (
@@ -175,13 +177,15 @@ function CheckoutContent() {
                                                     )}
                                                 </button>
 
-                                                <button
+                                                <motion.button
+                                                    whileHover={{ scale: 1.02 }}
+                                                    whileTap={{ scale: 0.98 }}
                                                     onClick={handlePayment}
                                                     disabled={paymentStatus === "processing"}
-                                                    className="flex w-full items-center justify-center gap-3 rounded-full border border-white/10 bg-white/5 px-8 py-5 text-sm font-black text-white hover:bg-white/10 transition-all uppercase tracking-widest"
+                                                    className="flex w-full items-center justify-center gap-3 rounded-full border border-white/10 bg-white/5 px-8 py-5 text-sm font-black text-white hover:bg-white/10 hover:border-white/20 transition-all uppercase tracking-widest"
                                                 >
                                                     Pay {plan.price} with Card
-                                                </button>
+                                                </motion.button>
                                             </div>
 
                                             <p className="text-center text-[10px] font-bold text-white/20 uppercase tracking-[0.2em]">

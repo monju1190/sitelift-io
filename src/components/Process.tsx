@@ -60,15 +60,16 @@ export function Process() {
                                 <motion.div
                                     initial={{ opacity: 0, x: i % 2 === 0 ? -50 : 50 }}
                                     whileInView={{ opacity: 1, x: 0 }}
+                                    whileHover={{ x: i % 2 === 0 ? -10 : 10, scale: 1.02 }}
                                     transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                                     viewport={{ once: true, margin: "-100px" }}
-                                    className={`w-full pl-8 md:w-[45%] md:pl-0 ${i % 2 === 0 ? "md:text-right" : "md:text-left"}`}
+                                    className={`w-full pl-8 md:w-[45%] md:pl-0 cursor-default transition-all group ${i % 2 === 0 ? "md:text-right" : "md:text-left"}`}
                                 >
-                                    <span className="mb-2 block text-xs font-bold tracking-widest text-muted-foreground uppercase">
+                                    <span className="mb-2 block text-xs font-bold tracking-widest text-muted-foreground uppercase transition-colors group-hover:text-white/40">
                                         Step 0{i + 1} — {step.period}
                                     </span>
-                                    <h3 className="mb-4 text-2xl font-bold">{step.title}</h3>
-                                    <p className="text-muted-foreground leading-relaxed">
+                                    <h3 className="mb-4 text-2xl font-bold transition-all group-hover:text-white group-hover:tracking-tight">{step.title}</h3>
+                                    <p className="text-muted-foreground leading-relaxed transition-colors group-hover:text-white/60">
                                         {step.description}
                                     </p>
                                 </motion.div>

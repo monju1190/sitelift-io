@@ -172,11 +172,11 @@ export function Navbar() {
                     <MagneticButton className="relative">
                         <Link
                             href="/contact"
-                            className={`group flex items-center justify-center overflow-hidden rounded-full border bg-white/5 transition-all active:scale-90 ${scrolled ? "h-14 w-14 border-white/20" : "px-10 py-4 border-white/10"
+                            className={`group flex items-center justify-center overflow-hidden rounded-full border bg-white/5 transition-all active:scale-90 hover:scale-105 hover:bg-white/10 ${scrolled ? "h-14 w-14 border-white/20" : "px-10 py-4 border-white/10"
                                 }`}
                         >
                             <span className={`relative z-10 text-[10px] font-black tracking-widest text-white ${scrolled ? "hidden" : "block"}`}>GET IN TOUCH</span>
-                            <ArrowUpRight className="relative z-10 h-4 w-4 text-white" />
+                            <ArrowUpRight className="relative z-10 h-4 w-4 text-white transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
                             <motion.div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity" />
                         </Link>
                     </MagneticButton>
