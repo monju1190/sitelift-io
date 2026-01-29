@@ -118,12 +118,12 @@ export function Pricing() {
                             </div>
 
                             <Link
-                                href={`/checkout?plan=${plan.name.toLowerCase()}`}
+                                href={`/plans/${plan.name.toLowerCase()}`}
                                 className={`group flex w-full items-center justify-center gap-2 rounded-full py-5 text-sm font-black transition-all duration-500 ${plan.highlight
                                     ? "bg-white text-black hover:bg-neutral-200"
                                     : "border border-white/10 bg-white/5 text-white hover:bg-white/10"
                                     }`}>
-                                CHOOSE {plan.name}
+                                VIEW {plan.name} DETAILS
                                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                             </Link>
                         </motion.div>

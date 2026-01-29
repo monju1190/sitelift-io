@@ -4,15 +4,99 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Mail, MessageSquare, Calendar, ArrowRight, CheckCircle2, Globe, Github, Twitter, Linkedin } from "lucide-react";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
+import { ChevronDown } from "lucide-react";
+
+function CustomSelect({ options, name }: { options: string[], name: string }) {
+    const [isOpen, setIsOpen] = useState(false);
+    const [selected, setSelected] = useState(options[0]);
+    const containerRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+                setIsOpen(false);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
+
+    return (
+        <div ref={containerRef} className="relative w-full">
+            <input type="hidden" name={name} value={selected} />
+            <button
+                type="button"
+                onClick={() => setIsOpen(!isOpen)}
+                className="flex w-full items-center justify-between rounded-2xl border border-white/10 bg-transparent px-6 py-4 text-left text-white focus:border-white transition-all hover:bg-white/5"
+            >
+                <span className="text-sm font-bold">{selected}</span>
+                <ChevronDown className={`h-4 w-4 text-white/40 transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`} />
+            </button>
+
+            <AnimatePresence>
+                {isOpen && (
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.95, y: 10 }}
+                        className="absolute top-full left-0 z-50 mt-2 w-full overflow-hidden rounded-2xl border border-white/10 bg-[#0A0A0A] p-2 backdrop-blur-xl shadow-2xl"
+                    >
+                        {options.map((option) => (
+                            <button
+                                key={option}
+                                type="button"
+                                onClick={() => {
+                                    setSelected(option);
+                                    setIsOpen(false);
+                                }}
+                                className={`flex w-full items-center px-4 py-3 text-sm font-bold transition-all rounded-xl ${selected === option
+                                        ? "bg-white text-black"
+                                        : "text-white/40 hover:bg-white/5 hover:text-white"
+                                    }`}
+                            >
+                                {option}
+                            </button>
+                        ))}
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </div>
+    );
+}
 
 export default function ContactPage() {
     const [formState, setFormState] = useState<"idle" | "submitting" | "success">("idle");
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setFormState("submitting");
-        setTimeout(() => setFormState("success"), 2000);
+
+        const formData = new FormData(e.currentTarget);
+        const data = {
+            name: formData.get("name"),
+            email: formData.get("email"),
+            projectType: formData.get("projectType"),
+            message: formData.get("message"),
+        };
+
+        try {
+            const res = await fetch("/api/contact", {
+                method: "POST",
+                body: JSON.stringify(data),
+                headers: { "Content-Type": "application/json" },
+            });
+
+            if (res.ok) {
+                setFormState("success");
+            } else {
+                setFormState("idle");
+                alert("Something went wrong. Please try again.");
+            }
+        } catch (error) {
+            setFormState("idle");
+            alert("Network error. Please check your connection.");
+        }
     };
 
     return (
@@ -110,25 +194,28 @@ export default function ContactPage() {
                                         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                                             <div className="space-y-2">
                                                 <label className="text-[10px] font-black uppercase tracking-widest text-white/40">Name</label>
-                                                <input required type="text" placeholder="John Doe" className="w-full rounded-2xl border border-white/10 bg-transparent px-6 py-4 text-white focus:border-white focus:outline-none transition-colors" />
+                                                <input name="name" required type="text" placeholder="John Doe" className="w-full rounded-2xl border border-white/10 bg-transparent px-6 py-4 text-white focus:border-white focus:outline-none transition-colors" />
                                             </div>
                                             <div className="space-y-2">
                                                 <label className="text-[10px] font-black uppercase tracking-widest text-white/40">Email</label>
-                                                <input required type="email" placeholder="john@company.com" className="w-full rounded-2xl border border-white/10 bg-transparent px-6 py-4 text-white focus:border-white focus:outline-none transition-colors" />
+                                                <input name="email" required type="email" placeholder="john@company.com" className="w-full rounded-2xl border border-white/10 bg-transparent px-6 py-4 text-white focus:border-white focus:outline-none transition-colors" />
                                             </div>
                                         </div>
-                                        <div className="space-y-2">
+                                        <div className="space-y-2 relative">
                                             <label className="text-[10px] font-black uppercase tracking-widest text-white/40">Project Type</label>
-                                            <select className="w-full rounded-2xl border border-white/10 bg-black px-6 py-4 text-white focus:border-white focus:outline-none transition-colors appearance-none">
-                                                <option>WordPress Migration</option>
-                                                <option>Webflow to Next.js</option>
-                                                <option>Custom SaaS Build</option>
-                                                <option>Performance Audit</option>
-                                            </select>
+                                            <CustomSelect
+                                                name="projectType"
+                                                options={[
+                                                    "WordPress Migration",
+                                                    "Webflow to Next.js",
+                                                    "Custom SaaS Build",
+                                                    "Performance Audit"
+                                                ]}
+                                            />
                                         </div>
                                         <div className="space-y-2">
                                             <label className="text-[10px] font-black uppercase tracking-widest text-white/40">Message</label>
-                                            <textarea rows={4} placeholder="How can we help?" className="w-full rounded-2xl border border-white/10 bg-transparent px-6 py-4 text-white focus:border-white focus:outline-none transition-colors resize-none" />
+                                            <textarea name="message" rows={4} placeholder="How can we help?" className="w-full rounded-2xl border border-white/10 bg-transparent px-6 py-4 text-white focus:border-white focus:outline-none transition-colors resize-none" />
                                         </div>
                                         <button
                                             disabled={formState === "submitting"}
