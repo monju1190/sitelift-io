@@ -82,8 +82,10 @@ export function Hero() {
                         <span className="text-white drop-shadow-[0_0_30px_rgba(255,255,255,0.2)]">site</span>
                     </div>
                     <div className="flex flex-wrap justify-center gap-x-4">
-                        <span className="text-white drop-shadow-[0_0_30px_rgba(255,255,255,0.2)]">To</span>
-                        <span className="text-muted-foreground/80">next.js</span>
+                        <span className="text-muted-foreground/80">to</span>
+                        <span className="text-white drop-shadow-[0_0_30px_rgba(255,255,255,0.2)]">next.</span>
+                        <span className="text-muted-foreground/80">js</span>
+
                     </div>
                 </motion.h1>
 

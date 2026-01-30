@@ -109,7 +109,7 @@ export default function FreeAuditPage() {
                         </h1>
 
                         <p className="mb-12 max-w-xl text-xl font-medium text-white/40 leading-relaxed">
-                            Stop guessing. Get a deep technical breakdown of your Next.js performance, Core Web Vitals, and conversion leaks.
+                            Stop guessing. Get a deep technical breakdown of your website's performance, Core Web Vitals, and conversion leaks.
                         </p>
 
                         <div className="grid grid-cols-2 gap-8 border-t border-white/5 pt-12">
@@ -321,14 +321,29 @@ export default function FreeAuditPage() {
                                         ))}
                                     </div>
 
-                                    <div className="rounded-2xl bg-white/5 p-6 mb-8 text-center">
-                                        <p className="text-xs text-white/40 mb-4 font-medium italic">
-                                            "Your infrastructure is running at sub-optimal levels. We can propel these scores to 100 within 14 days."
-                                        </p>
-                                        <div className="text-[10px] font-black text-white uppercase tracking-widest">
-                                            — The Sitelift Team
-                                        </div>
-                                    </div>
+                                    {(() => {
+                                        const score = reportData?.performance || 0;
+                                        let message = "Your infrastructure is running at sub-optimal levels. We can propel these scores to 100 within 14 days.";
+
+                                        if (score >= 90) {
+                                            message = "Exceptional performance detected. You are leading the industry. We can help you maintain this peak efficiency as you continue to scale.";
+                                        } else if (score >= 70) {
+                                            message = "Solid architecture, but potential remains untapped. We can fine-tune your Core Web Vitals to reach a consistent 100.";
+                                        } else if (score < 50) {
+                                            message = "Critical performance bottlenecks isolated. Your conversion rates are at significant risk. Immediate architectural intervention is recommended.";
+                                        }
+
+                                        return (
+                                            <div className="rounded-2xl bg-white/5 p-6 mb-8 text-center border border-white/5">
+                                                <p className="text-xs text-white/40 mb-4 font-medium italic leading-relaxed">
+                                                    "{message}"
+                                                </p>
+                                                <div className="text-[10px] font-black text-white uppercase tracking-widest">
+                                                    — The Sitelift Team
+                                                </div>
+                                            </div>
+                                        );
+                                    })()}
 
                                     <div className="flex flex-col gap-4">
                                         <button

@@ -17,11 +17,12 @@ export function Showcase() {
     // but I'll provide a cleaner solution by mapping the transforms correctly or using a hook.
     // For now, I'll just adjust the transforms to be less aggressive.
     const y1Dynamic = useTransform(scrollYProgress, [0, 1], [100, -100]);
+    const yMidDynamic = useTransform(scrollYProgress, [0, 1], [150, -150]);
     const y2Dynamic = useTransform(scrollYProgress, [0, 1], [200, -200]);
     const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
 
     return (
-        <section ref={containerRef} className="relative bg-black py-20 pb-0 overflow-hidden">
+        <section ref={containerRef} className="relative bg-black py-20 pb-40 overflow-hidden">
             <div className="mx-auto max-w-7xl px-6">
                 <motion.div
                     style={{ opacity }}
@@ -57,7 +58,7 @@ export function Showcase() {
                     </motion.div>
 
                     {/* Scalability Info */}
-                    <div className="mt-0 md:mt-24 h-full">
+                    <motion.div style={{ y: yMidDynamic }} className="md:mt-24">
                         <motion.div
                             whileHover={{ y: -20, scale: 1.02 }}
                             className="rounded-3xl border border-white/5 bg-white/[0.02] p-10 backdrop-blur-3xl transition-all duration-500 cursor-default hover:bg-white/[0.04] hover:border-white/10 group h-full"
@@ -69,7 +70,7 @@ export function Showcase() {
                                 reducing latency to near-zero globally.
                             </p>
                         </motion.div>
-                    </div>
+                    </motion.div>
 
                     {/* SEO Info */}
                     <motion.div style={{ y: y2Dynamic }}>

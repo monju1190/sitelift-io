@@ -46,9 +46,9 @@ export function DataShowcase() {
     return (
         <section ref={containerRef} className="relative overflow-hidden bg-black py-32 md:py-48 px-6">
             <div className="mx-auto max-w-7xl">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 lg:items-start">
                     {/* Left Side: Content */}
-                    <div className="space-y-12">
+                    <div className="space-y-12 lg:pt-12">
                         <motion.div
                             initial={{ opacity: 0, x: -50 }}
                             whileInView={{ opacity: 1, x: 0 }}
@@ -69,32 +69,7 @@ export function DataShowcase() {
                             </p>
                         </motion.div>
 
-                        {/* Interactive Tech Specs */}
-                        <div className="space-y-6">
-                            {[
-                                { label: "Server Components", value: "Zero Bundle Size", desc: "We move logic to the server, keeping your frontend lightweight." },
-                                { label: "Edge Middleware", value: "Global Speed", desc: "Dynamic content served from the closest possible location to the user." },
-                            ].map((spec, i) => (
-                                <motion.div
-                                    key={i}
-                                    initial={{ opacity: 0, y: 20 }}
-                                    whileInView={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: 0.5 + i * 0.2 }}
-                                    className="p-6 rounded-3xl border border-white/5 bg-white/[0.01]"
-                                >
-                                    <h4 className="text-[10px] font-black tracking-widest text-white/40 uppercase mb-2">{spec.label}</h4>
-                                    <p className="text-xl font-bold text-white mb-2">{spec.value}</p>
-                                    <p className="text-sm text-white/40">{spec.desc}</p>
-                                </motion.div>
-                            ))}
-                        </div>
 
-                        {/* Metrics Grid */}
-                        <div className="grid grid-cols-2 gap-4">
-                            {metrics.map((metric, i) => (
-                                <DataMetricCard key={i} metric={metric} index={i} />
-                            ))}
-                        </div>
                     </div>
 
                     {/* Right Side: Animated Visual Element */}

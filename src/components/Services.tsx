@@ -42,9 +42,9 @@ export function Services() {
     const y2 = useTransform(scrollYProgress, [0, 1], [0, 100]);
 
     // Disable parallax on mobile for better visibility/layout alignment
-    const [isMobile, setIsMobile] = useState(false);
+    const [parallaxEnabled, setParallaxEnabled] = useState(false);
     useEffect(() => {
-        const checkMobile = () => setIsMobile(window.innerWidth < 768);
+        const checkMobile = () => setParallaxEnabled(window.innerWidth >= 768);
         checkMobile();
         window.addEventListener("resize", checkMobile);
         return () => window.removeEventListener("resize", checkMobile);
@@ -87,33 +87,37 @@ export function Services() {
                     {services.map((service, i) => (
                         <motion.div
                             key={i}
-                            style={{ y: isMobile ? 0 : (i % 2 === 0 ? y1 : y2) }}
-                            initial={{ opacity: 0, y: 50 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: i * 0.1 }}
-                            viewport={{ once: true, margin: "-50px" }}
-                            className="group relative flex flex-col gap-8 rounded-[3rem] border border-white/5 bg-white/[0.02] p-12 transition-all duration-700 hover:bg-white/[0.04] hover:border-white/10"
+                            style={{ y: parallaxEnabled ? (i % 2 === 0 ? y1 : y2) : 0 }}
+                            className="relative"
                         >
-                            <div className="flex items-start justify-between">
-                                <div className="flex h-16 w-16 items-center justify-center rounded-[1.5rem] bg-white text-black transition-transform duration-700 group-hover:scale-110 group-hover:rotate-[10deg]">
-                                    <service.icon className="h-8 w-8" />
+                            <motion.div
+                                initial={{ opacity: 0, y: 40 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: i * 0.1 }}
+                                viewport={{ once: true, margin: "-50px" }}
+                                className="group relative flex flex-col gap-8 rounded-[3rem] border border-white/5 bg-white/[0.02] p-12 transition-all duration-700 hover:bg-white/[0.04] hover:border-white/10"
+                            >
+                                <div className="flex items-start justify-between">
+                                    <div className="flex h-16 w-16 items-center justify-center rounded-[1.5rem] bg-white text-black transition-transform duration-700 group-hover:scale-110 group-hover:rotate-[10deg]">
+                                        <service.icon className="h-8 w-8" />
+                                    </div>
+                                    <ArrowUpRight className="h-6 w-6 text-white/20 transition-all duration-500 group-hover:text-white group-hover:translate-x-1 group-hover:-translate-y-1" />
                                 </div>
-                                <ArrowUpRight className="h-6 w-6 text-white/20 transition-all duration-500 group-hover:text-white group-hover:translate-x-1 group-hover:-translate-y-1" />
-                            </div>
 
-                            <div className="space-y-4">
-                                <h3 className="text-3xl font-bold tracking-tight text-white md:text-4xl">{service.title}</h3>
-                                <p className="text-lg text-muted-foreground/70 leading-relaxed font-medium">
-                                    {service.description}
-                                </p>
-                            </div>
+                                <div className="space-y-4">
+                                    <h3 className="text-3xl font-bold tracking-tight text-white md:text-4xl">{service.title}</h3>
+                                    <p className="text-lg text-muted-foreground/70 leading-relaxed font-medium">
+                                        {service.description}
+                                    </p>
+                                </div>
 
-                            <div className="mt-4 flex items-center gap-4">
-                                <span className="rounded-full border border-white/10 px-4 py-1.5 text-[10px] font-black tracking-widest text-white/40 uppercase transition-colors group-hover:border-white group-hover:text-white">
-                                    {service.stat}
-                                </span>
-                                <span className="h-px flex-grow bg-white/5" />
-                            </div>
+                                <div className="mt-4 flex items-center gap-4">
+                                    <span className="rounded-full border border-white/10 px-4 py-1.5 text-[10px] font-black tracking-widest text-white/40 uppercase transition-colors group-hover:border-white group-hover:text-white">
+                                        {service.stat}
+                                    </span>
+                                    <span className="h-px flex-grow bg-white/5" />
+                                </div>
+                            </motion.div>
                         </motion.div>
                     ))}
                 </div>
