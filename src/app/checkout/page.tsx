@@ -7,6 +7,7 @@ import { ShieldCheck, Lock, ArrowRight, CheckCircle2, CreditCard } from "lucide-
 import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import NextImage from "next/image";
 
 const plans: Record<string, { price: string; name: string }> = {
     standard: { name: "Standard", price: "$2,900" },
@@ -173,17 +174,13 @@ function CheckoutContent() {
                                                             PROCESSING...
                                                         </span>
                                                     ) : (
-import NextImage from "next/image";
-
-                                                    // ... existing code ...
-
-                                                    <NextImage
-                                                        src="https://upload.wikimedia.org/wikipedia/commons/b/b5/Google_Pay_%28GPay%29_Logo_%282020%29.svg"
-                                                        alt="Google Pay"
-                                                        width={48}
-                                                        height={24}
-                                                        className="h-6 w-auto"
-                                                    />
+                                                        <NextImage
+                                                            src="https://upload.wikimedia.org/wikipedia/commons/b/b5/Google_Pay_%28GPay%29_Logo_%282020%29.svg"
+                                                            alt="Google Pay"
+                                                            width={48}
+                                                            height={24}
+                                                            className="h-6 w-auto"
+                                                        />
                                                     )}
                                                 </button>
 
