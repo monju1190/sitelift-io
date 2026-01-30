@@ -44,7 +44,7 @@ export function Showcase() {
                     {/* Performance Info */}
                     <motion.div
                         style={{ y: y1Dynamic }}
-                        whileHover={{ y: y1Dynamic.get() - 20, scale: 1.02 }}
+                        whileHover={{ y: -20, scale: 1.02 }}
                         className="rounded-3xl border border-white/5 bg-white/[0.02] p-10 backdrop-blur-3xl transition-all duration-500 cursor-default hover:bg-white/[0.04] hover:border-white/10 group"
                     >
                         <h4 className="text-[10px] font-black tracking-widest text-white/30 uppercase mb-4 transition-colors group-hover:text-white/60">Core Web Vitals</h4>
@@ -71,7 +71,7 @@ export function Showcase() {
                     {/* SEO Info */}
                     <motion.div
                         style={{ y: y2Dynamic }}
-                        whileHover={{ y: y2Dynamic.get() - 20, scale: 1.02 }}
+                        whileHover={{ y: -20, scale: 1.02 }}
                         className="rounded-3xl border border-white/5 bg-white/[0.02] p-10 backdrop-blur-3xl transition-all duration-500 cursor-default hover:bg-white/[0.04] hover:border-white/10 group"
                     >
                         <h4 className="text-[10px] font-black tracking-widest text-white/30 uppercase mb-4 transition-colors group-hover:text-white/60">SEO Efficiency</h4>

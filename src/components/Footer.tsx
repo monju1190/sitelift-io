@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
+import NextImage from "next/image";
 import { ArrowRight, Twitter, Linkedin } from "lucide-react";
 
 export function CTA() {
@@ -40,12 +41,18 @@ export function Footer() {
     const currentYear = new Date().getFullYear();
 
     return (
-        <footer className="bg-black py-12 px-6 border-t border-white/5 mx-auto max-w-7xl mt-20">
+        <footer className="bg-black pt-12 pb-32 px-6 border-t border-white/5 mx-auto max-w-7xl mt-20">
             <div className="flex flex-col md:flex-row items-center justify-between gap-10">
                 {/* Left: Brand */}
                 <div className="flex items-center gap-6">
                     <Link href="/" className="group flex items-center gap-2 text-xl font-black tracking-tighter">
-                        <img src="/logo.png" alt="Sitelift Logo" className="h-14 w-14 object-contain transition-transform group-hover:rotate-12" />
+                        <NextImage
+                            src="/logo.png"
+                            alt="Sitelift Logo"
+                            width={56}
+                            height={56}
+                            className="h-14 w-14 object-contain transition-transform group-hover:rotate-12"
+                        />
                         sitelift
                     </Link>
                     <p className="hidden md:block text-[9px] font-bold text-white/20 tracking-[0.2em] uppercase">
@@ -71,12 +78,13 @@ export function Footer() {
                 <div className="flex flex-col items-center md:items-end gap-6">
                     <div className="flex items-center gap-6">
                         {[
-                            { icon: Twitter, href: "#" },
-                            { icon: Linkedin, href: "#" },
+                            { icon: Twitter, href: "#", label: "Twitter" },
+                            { icon: Linkedin, href: "#", label: "LinkedIn" },
                         ].map((social, i) => (
                             <Link
                                 key={i}
                                 href={social.href}
+                                aria-label={social.label}
                                 className="group relative flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 transition-all hover:scale-110 hover:bg-white hover:text-black"
                             >
                                 <social.icon className="h-4 w-4" />

@@ -17,8 +17,36 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "SiteLift | Next.js Excellence & Digital Transformation",
-  description: "Transform your website into a high-performance business asset with SiteLift. We migrate WordPress, Webflow, and Framer sites to Next.js.",
+  title: "SiteLift | High-Performance Next.js Digital Transformation",
+  description: "Transform your website into a high-performance business asset. We migrate WordPress, Webflow, and Framer sites to Next.js with 100/100 Lighthouse scores.",
+  keywords: ["Next.js", "Web Performance", "SEO", "WordPress Migration", "Webflow to Next.js", "React", "Digital Transformation"],
+  authors: [{ name: "SiteLift Team" }],
+  openGraph: {
+    title: "SiteLift | Next.js Excellence",
+    description: "Ultra-fast, conversion-focused Next.js experiences.",
+    url: "https://sitelift.io",
+    siteName: "SiteLift",
+    images: [
+      {
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "SiteLift Performance Architecture",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "SiteLift | Next.js Excellence",
+    description: "Ultra-fast Next.js transformation.",
+    images: ["/og-image.jpg"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({

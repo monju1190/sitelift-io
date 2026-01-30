@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { Github, Twitter, Linkedin, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
-import Image from "next/image";
+import NextImage from "next/image";
 
 const founders = [
     {
@@ -59,10 +59,12 @@ export function Founders() {
                             className="group relative flex flex-col items-center bg-white/[0.02] border border-white/5 rounded-[3rem] p-12 text-center transition-all duration-500 hover:bg-white/[0.04] hover:border-white/10 cursor-default"
                         >
                             <div className="relative mb-8 h-40 w-40 overflow-hidden rounded-full border-4 border-white/10 grayscale group-hover:grayscale-0 transition-all duration-700">
-                                <img
+                                <NextImage
                                     src={founder.image}
-                                    alt={founder.name}
-                                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                    alt={`${founder.name} - ${founder.role}`}
+                                    fill
+                                    className="object-cover transition-transform duration-700 group-hover:scale-110"
+                                    sizes="160px"
                                 />
                             </div>
 

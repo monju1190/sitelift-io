@@ -5,6 +5,7 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { ArrowUpRight } from "lucide-react";
 import { useRef } from "react";
+import NextImage from "next/image";
 
 const projects = [
     {
@@ -81,10 +82,12 @@ export default function WorkPage() {
                             className="group relative cursor-pointer"
                         >
                             <div className="relative aspect-[16/10] overflow-hidden rounded-[3rem] border border-white/5 bg-white/[0.02] transition-all duration-700 group-hover:border-white/20">
-                                <img
+                                <NextImage
                                     src={project.image}
-                                    alt={project.title}
-                                    className="h-full w-full object-cover grayscale transition-all duration-700 group-hover:grayscale-0 group-hover:scale-110"
+                                    alt={`${project.title} - ${project.category}`}
+                                    fill
+                                    className="object-cover grayscale transition-all duration-700 group-hover:grayscale-0 group-hover:scale-110"
+                                    sizes="(max-width: 768px) 100vw, 50vw"
                                 />
                                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                                     <div className="h-20 w-20 rounded-full bg-white flex items-center justify-center scale-0 group-hover:scale-100 transition-transform duration-500 delay-100">

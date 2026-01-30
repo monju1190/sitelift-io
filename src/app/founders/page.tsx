@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Github, Twitter, Linkedin, Mail } from "lucide-react";
+import NextImage from "next/image";
 
 export default function FoundersPage() {
     return (
@@ -47,11 +48,13 @@ export default function FoundersPage() {
                         viewport={{ once: true }}
                         className="grid grid-cols-1 md:grid-cols-2 gap-20 items-center"
                     >
-                        <div className="aspect-square overflow-hidden rounded-[4rem] grayscale hover:grayscale-0 transition-all duration-1000">
-                            <img
+                        <div className="aspect-square overflow-hidden rounded-[4rem] grayscale hover:grayscale-0 transition-all duration-1000 relative">
+                            <NextImage
                                 src="/founders/founder1.jpg"
-                                alt="Arafat Arnob"
-                                className="h-full w-full object-cover transition-transform duration-1000 hover:scale-105"
+                                alt="Arafat Arnob - CEO of SiteLift"
+                                fill
+                                className="object-cover transition-transform duration-1000 hover:scale-105"
+                                sizes="(max-width: 768px) 100vw, 50vw"
                             />
                         </div>
                         <div>
@@ -76,11 +79,13 @@ export default function FoundersPage() {
                         viewport={{ once: true }}
                         className="grid grid-cols-1 md:grid-cols-2 gap-20 items-center md:flex-row-reverse"
                     >
-                        <div className="md:order-2 aspect-square overflow-hidden rounded-[4rem] grayscale hover:grayscale-0 transition-all duration-1000">
-                            <img
+                        <div className="md:order-2 aspect-square overflow-hidden rounded-[4rem] grayscale hover:grayscale-0 transition-all duration-1000 relative">
+                            <NextImage
                                 src="/founders/founder2.jpg"
-                                alt="Monjur Ahmed"
-                                className="h-full w-full object-cover transition-transform duration-1000 hover:scale-105"
+                                alt="Monjur Ahmed - CTO of SiteLift"
+                                fill
+                                className="object-cover transition-transform duration-1000 hover:scale-105"
+                                sizes="(max-width: 768px) 100vw, 50vw"
                             />
                         </div>
                         <div className="md:order-1">

@@ -37,7 +37,7 @@ export function ScrollTop() {
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
                     onClick={scrollToTop}
-                    className="fixed bottom-8 right-8 z-[90] flex h-14 w-14 items-center justify-center rounded-full border border-white/10 bg-black/80 text-white shadow-[0_8px_32px_rgba(0,0,0,0.5)] backdrop-blur-xl transition-colors hover:border-white/20"
+                    className="fixed bottom-12 right-12 z-[90] flex h-14 w-14 items-center justify-center rounded-full border border-white/10 bg-black/80 text-white shadow-[0_8px_32px_rgba(0,0,0,0.5)] backdrop-blur-xl transition-colors hover:border-white/20"
                 >
                     <ArrowUp className="h-6 w-6" />
                 </motion.button>

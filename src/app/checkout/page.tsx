@@ -173,7 +173,17 @@ function CheckoutContent() {
                                                             PROCESSING...
                                                         </span>
                                                     ) : (
-                                                        <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/Google_Pay_%28GPay%29_Logo_%282020%29.svg" alt="Google Pay" className="h-6" />
+import NextImage from "next/image";
+
+                                                    // ... existing code ...
+
+                                                    <NextImage
+                                                        src="https://upload.wikimedia.org/wikipedia/commons/b/b5/Google_Pay_%28GPay%29_Logo_%282020%29.svg"
+                                                        alt="Google Pay"
+                                                        width={48}
+                                                        height={24}
+                                                        className="h-6 w-auto"
+                                                    />
                                                     )}
                                                 </button>
 

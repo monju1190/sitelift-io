@@ -3,6 +3,7 @@
 import { motion, useScroll, useMotionValueEvent, AnimatePresence, useSpring, useMotionValue, useTransform } from "framer-motion";
 import { useState, useRef, useEffect, useMemo } from "react";
 import Link from "next/link";
+import NextImage from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useLenis } from "lenis/react";
 import { ArrowUpRight, Menu, X, Sparkles } from "lucide-react";
@@ -47,10 +48,12 @@ function MagneticButton({ children, className, onClick }: { children: React.Reac
 export function Navbar() {
     const { scrollY } = useScroll();
     const [scrolled, setScrolled] = useState(false);
+    const [visible, setVisible] = useState(true);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const pathname = usePathname();
     const router = useRouter();
     const lenis = useLenis();
+    const lastScrollY = useRef(0);
 
     const mouseX = useMotionValue(0);
     const mouseY = useMotionValue(0);
@@ -67,7 +70,15 @@ export function Navbar() {
     }, [mouseX, mouseY]);
 
     useMotionValueEvent(scrollY, "change", (latest) => {
-        setScrolled(latest > 100);
+        const isScrollingDown = latest > lastScrollY.current;
+        if (latest > 100) {
+            setVisible(!isScrollingDown);
+            setScrolled(true);
+        } else {
+            setVisible(true);
+            setScrolled(false);
+        }
+        lastScrollY.current = latest;
     });
 
     const handleLogoClick = (e: React.MouseEvent) => {
@@ -96,7 +107,8 @@ export function Navbar() {
     return (
         <motion.header
             initial={{ y: -100 }}
-            animate={{ y: 0 }}
+            animate={{ y: visible ? 0 : -120 }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
             className="fixed top-0 left-0 right-0 z-[100] flex justify-center p-6 pointer-events-none"
         >
             {/* SVG Filter for Liquid Prism Effect */}
@@ -129,7 +141,14 @@ export function Navbar() {
                     {/* Branding Orb */}
                     <Link href="/" onClick={handleLogoClick} className="group relative flex items-center gap-3">
                         <div className="relative flex h-10 w-10 md:h-14 md:w-14 items-center justify-center overflow-hidden rounded-full bg-white text-black transition-all hover:scale-110 active:scale-95 shadow-[0_0_30px_rgba(255,255,255,0.1)]">
-                            <img src="/logo.png" alt="Sitelift Logo" className="relative z-10 h-10 w-10 md:h-14 md:w-14 object-contain scale-[1.5]" />
+                            <NextImage
+                                src="/logo.png"
+                                alt="Sitelift Logo"
+                                width={56}
+                                height={56}
+                                className="relative z-10 h-10 w-10 md:h-14 md:w-14 object-contain scale-[1.5]"
+                                priority
+                            />
                             <motion.div className="absolute inset-0 bg-neutral-200" initial={{ y: "100%" }} whileHover={{ y: 0 }} transition={{ duration: 0.3 }} />
                         </div>
                         {!scrolled && (

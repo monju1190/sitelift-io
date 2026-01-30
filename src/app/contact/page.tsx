@@ -239,7 +239,7 @@ export default function ContactPage() {
                                         </div>
                                         <h3 className="text-3xl font-bold mb-4">Message Sent.</h3>
                                         <p className="text-white/40 mb-10 leading-relaxed">
-                                            We've received your request. Arafat or Monjur will reach out to you within 24 hours.
+                                            We've received your request. sitelife team will reach out to you within 24 hours.
                                         </p>
                                         <button
                                             onClick={() => setFormState("idle")}

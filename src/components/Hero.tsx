@@ -74,10 +74,11 @@ export function Hero() {
 
                 <motion.h1
                     variants={itemVariants}
-                    className="mb-8 text-4xl font-bold tracking-[-0.04em] md:text-[11rem] md:leading-[0.95] text-white"
+                    className="mb-8 text-5xl font-extrabold tracking-tight md:text-[10rem] md:leading-[0.8] uppercase flex flex-col items-center"
                 >
-                    LIFT YOUR SITE <br />
-                    <span className="text-muted-foreground/30 uppercase">TO NEXT.JS</span>
+                    <span className="text-white drop-shadow-[0_0_30px_rgba(255,255,255,0.2)]">SPEED BEYOND</span>
+                    <span className="text-white/20 italic tracking-tighter">MEASURE.</span>
+                    <span className="mt-4 text-4xl md:text-6xl font-black text-white/10 tracking-[0.2em]">SEO WITHOUT LIMITS.</span>
                 </motion.h1>
 
                 <motion.p
@@ -93,6 +94,7 @@ export function Hero() {
                 >
                     <Link
                         href="/free-audit"
+                        aria-label="Get your free performance audit"
                         className="group relative flex items-center justify-center overflow-hidden rounded-full bg-white px-12 py-6 text-sm font-black text-black transition-all hover:scale-[1.02] active:scale-95"
                     >
                         <span className="relative z-10 flex items-center gap-3">
