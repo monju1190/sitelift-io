@@ -9,8 +9,8 @@ export async function POST(req: Request) {
         }
 
         // Google PageSpeed Insights API endpoint
-        // We use a free-tier compatible call (no API key required for low volume)
         const apiKey = process.env.PAGESPEED_API_KEY;
+        if (!apiKey) console.warn("PAGESPEED_API_KEY is missing. Anonymous quota limits apply.");
         const psiUrl = `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encodeURIComponent(
             url
         )}&category=performance&category=accessibility&category=best-practices&category=seo&strategy=mobile${apiKey ? `&key=${apiKey}` : ""}`;
