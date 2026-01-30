@@ -76,8 +76,15 @@ export function Hero() {
                     variants={itemVariants}
                     className="mb-8 text-5xl font-extrabold tracking-tight md:text-[8rem] md:leading-[0.85] uppercase flex flex-col items-center"
                 >
-                    <span className="text-white drop-shadow-[0_0_30px_rgba(255,255,255,0.2)]">SPEED BEYOND MEASURE.</span>
-                    <span className="mt-4 text-4xl md:text-5xl font-black text-white/20 tracking-[0.2em]">SEO WITHOUT LIMITS.</span>
+                    <div className="flex flex-wrap justify-center gap-x-4">
+                        <span className="text-white drop-shadow-[0_0_30px_rgba(255,255,255,0.2)]">Lift</span>
+                        <span className="text-muted-foreground/80">your</span>
+                        <span className="text-white drop-shadow-[0_0_30px_rgba(255,255,255,0.2)]">site</span>
+                    </div>
+                    <div className="flex flex-wrap justify-center gap-x-4">
+                        <span className="text-white drop-shadow-[0_0_30px_rgba(255,255,255,0.2)]">To</span>
+                        <span className="text-muted-foreground/80">next.js</span>
+                    </div>
                 </motion.h1>
 
                 <motion.p
@@ -144,7 +151,7 @@ export function Hero() {
                     </motion.div>
                 </div>
             </motion.div>
-        </section>
+        </section >
     );
 }
 

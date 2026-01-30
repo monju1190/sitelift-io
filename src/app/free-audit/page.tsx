@@ -24,24 +24,46 @@ export default function FreeAuditPage() {
     const [url, setUrl] = useState("");
     const [name, setName] = useState("");
     const [reportData, setReportData] = useState<any>(null);
+    const [error, setError] = useState<string | null>(null);
 
-    const handleStartAudit = (e: React.FormEvent) => {
+    const handleStartAudit = async (e: React.FormEvent) => {
         e.preventDefault();
-        // Generate pseudo-data for the report
-        setReportData({
-            performance: Math.floor(Math.random() * (88 - 65 + 1)) + 65,
-            accessibility: Math.floor(Math.random() * (98 - 85 + 1)) + 85,
-            bestPractices: Math.floor(Math.random() * (90 - 70 + 1)) + 70,
-            seo: Math.floor(Math.random() * (95 - 80 + 1)) + 80,
-        });
-        setStep(2);
+        setError(null);
         setIsAnalyzing(true);
+        setProgress(0);
+        setStep(2);
+
+        try {
+            const response = await fetch("/api/audit", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ url, name }),
+            });
+
+            if (!response.ok) {
+                const errData = await response.json();
+                throw new Error(errData.error || "Failed to analyze site");
+            }
+
+            const data = await response.json();
+            setReportData(data);
+
+            // Artificial delay to show progress animation even if API is fast
+            // though PSI is usually slow anyway.
+        } catch (err: any) {
+            setError(err.message);
+            setStep(1);
+            setIsAnalyzing(false);
+        }
     };
 
     useEffect(() => {
         if (isAnalyzing) {
             const interval = setInterval(() => {
                 setProgress((prev) => {
+                    if (prev >= 95 && !reportData) {
+                        return 95; // Wait for data at 95%
+                    }
                     if (prev >= 100) {
                         clearInterval(interval);
                         setTimeout(() => {
@@ -50,12 +72,12 @@ export default function FreeAuditPage() {
                         }, 800);
                         return 100;
                     }
-                    return prev + 1;
+                    return prev + (prev < 90 ? 1 : 0.2); // Slow down near the end
                 });
-            }, 40);
+            }, 50);
             return () => clearInterval(interval);
         }
-    }, [isAnalyzing]);
+    }, [isAnalyzing, reportData]);
 
     return (
         <main className="min-h-screen bg-black text-white selection:bg-white selection:text-black">
@@ -162,9 +184,16 @@ export default function FreeAuditPage() {
                                                 />
                                             </div>
                                         </div>
+                                        {error && (
+                                            <div className="rounded-xl border border-red-500/20 bg-red-500/10 p-4 text-xs font-medium text-red-400">
+                                                {error}
+                                            </div>
+                                        )}
+
                                         <button
                                             type="submit"
-                                            className="group relative flex w-full items-center justify-center overflow-hidden rounded-full bg-white px-10 py-6 text-xs font-black text-black transition-all hover:scale-[1.02] active:scale-95 shadow-[0_20px_40px_rgba(255,255,255,0.1)]"
+                                            disabled={isAnalyzing}
+                                            className="group relative flex w-full items-center justify-center overflow-hidden rounded-full bg-white px-10 py-6 text-xs font-black text-black transition-all hover:scale-[1.02] active:scale-95 shadow-[0_20px_40px_rgba(255,255,255,0.1)] disabled:opacity-50"
                                         >
                                             <span className="relative z-10 flex items-center gap-3 tracking-[0.2em] uppercase">
                                                 Run Performance Audit
@@ -276,18 +305,20 @@ export default function FreeAuditPage() {
                                     </div>
 
                                     <div className="space-y-4 mb-10">
-                                        <div className="flex items-start gap-3">
-                                            <Zap className="h-4 w-4 text-amber-400 mt-1" />
-                                            <p className="text-sm text-white/60 leading-relaxed font-medium">
-                                                <span className="text-white font-bold">Critical:</span> Large Contentful Paint (LCP) exceeds 2.5s due to unoptimized image assets.
-                                            </p>
-                                        </div>
-                                        <div className="flex items-start gap-3">
-                                            <Cpu className="h-4 w-4 text-emerald-400 mt-1" />
-                                            <p className="text-sm text-white/60 leading-relaxed font-medium">
-                                                <span className="text-white font-bold">Insight:</span> Moving 40% of client-side logic to Server Components will drop TBT by ~300ms.
-                                            </p>
-                                        </div>
+                                        {reportData?.insights?.map((insight: any, i: number) => (
+                                            <div key={i} className="flex items-start gap-3">
+                                                {insight.type === "critical" ? (
+                                                    <Zap className="h-4 w-4 text-amber-400 mt-1" />
+                                                ) : (
+                                                    <Cpu className="h-4 w-4 text-emerald-400 mt-1" />
+                                                )}
+                                                <p className="text-sm text-white/60 leading-relaxed font-medium text-left">
+                                                    <span className="text-white font-bold">{insight.label}:</span> {insight.message}
+                                                    {insight.label === "LCP" && " (Large Contentful Paint)"}
+                                                    {insight.label === "TBT" && " (Total Blocking Time)"}
+                                                </p>
+                                            </div>
+                                        ))}
                                     </div>
 
                                     <div className="rounded-2xl bg-white/5 p-6 mb-8 text-center">
@@ -306,9 +337,22 @@ export default function FreeAuditPage() {
                                         >
                                             Secure Full Intervention
                                         </button>
-                                        <Link href="/" className="text-[9px] font-black text-white/20 uppercase tracking-widest hover:text-white transition-colors text-center">
-                                            Return to Home
-                                        </Link>
+                                        <div className="flex items-center justify-center gap-6">
+                                            <button
+                                                onClick={() => {
+                                                    setStep(1);
+                                                    setReportData(null);
+                                                    setError(null);
+                                                }}
+                                                className="text-[9px] font-black text-white/20 uppercase tracking-widest hover:text-white transition-colors"
+                                            >
+                                                Test Another
+                                            </button>
+                                            <div className="h-1 w-1 rounded-full bg-white/10" />
+                                            <Link href="/" className="text-[9px] font-black text-white/20 uppercase tracking-widest hover:text-white transition-colors text-center">
+                                                Return to Home
+                                            </Link>
+                                        </div>
                                     </div>
                                 </motion.div>
                             )}
