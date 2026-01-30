@@ -74,16 +74,15 @@ export function Hero() {
 
                 <motion.h1
                     variants={itemVariants}
-                    className="mb-8 text-5xl font-extrabold tracking-tight md:text-[10rem] md:leading-[0.8] uppercase flex flex-col items-center"
+                    className="mb-8 text-5xl font-extrabold tracking-tight md:text-[8rem] md:leading-[0.85] uppercase flex flex-col items-center"
                 >
-                    <span className="text-white drop-shadow-[0_0_30px_rgba(255,255,255,0.2)]">SPEED BEYOND</span>
-                    <span className="text-white/20 italic tracking-tighter">MEASURE.</span>
-                    <span className="mt-4 text-4xl md:text-6xl font-black text-white/10 tracking-[0.2em]">SEO WITHOUT LIMITS.</span>
+                    <span className="text-white drop-shadow-[0_0_30px_rgba(255,255,255,0.2)]">SPEED BEYOND MEASURE.</span>
+                    <span className="mt-4 text-4xl md:text-5xl font-black text-white/20 tracking-[0.2em]">SEO WITHOUT LIMITS.</span>
                 </motion.h1>
 
                 <motion.p
                     variants={itemVariants}
-                    className="mx-auto mb-16 max-w-2xl text-lg text-muted-foreground/80 leading-relaxed md:text-2xl font-medium"
+                    className="mx-auto mb-10 max-w-2xl text-lg text-muted-foreground/80 leading-relaxed md:text-xl font-medium"
                 >
                     We architect ultra-fast, conversion-focused <span className="text-white">Next.js</span> experiences for businesses that refuse to compromise.
                 </motion.p>

@@ -42,44 +42,48 @@ export function Showcase() {
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start relative z-20">
                     {/* Performance Info */}
-                    <motion.div
-                        style={{ y: y1Dynamic }}
-                        whileHover={{ y: -20, scale: 1.02 }}
-                        className="rounded-3xl border border-white/5 bg-white/[0.02] p-10 backdrop-blur-3xl transition-all duration-500 cursor-default hover:bg-white/[0.04] hover:border-white/10 group"
-                    >
-                        <h4 className="text-[10px] font-black tracking-widest text-white/30 uppercase mb-4 transition-colors group-hover:text-white/60">Core Web Vitals</h4>
-                        <p className="text-3xl font-bold mb-6 transition-colors group-hover:text-white">Perfect 100 on Mobile</p>
-                        <p className="text-sm text-white/40 leading-relaxed font-medium transition-colors group-hover:text-white/60">
-                            Our architecture ensures LCP stays under 1.2s even on slow 4G networks.
-                            Google loves fast sites, and so do your customers.
-                        </p>
+                    <motion.div style={{ y: y1Dynamic }}>
+                        <motion.div
+                            whileHover={{ y: -20, scale: 1.02 }}
+                            className="rounded-3xl border border-white/5 bg-white/[0.02] p-10 backdrop-blur-3xl transition-all duration-500 cursor-default hover:bg-white/[0.04] hover:border-white/10 group h-full"
+                        >
+                            <h4 className="text-[10px] font-black tracking-widest text-white/30 uppercase mb-4 transition-colors group-hover:text-white/60">Core Web Vitals</h4>
+                            <p className="text-3xl font-bold mb-6 transition-colors group-hover:text-white">Perfect 100 on Mobile</p>
+                            <p className="text-sm text-white/40 leading-relaxed font-medium transition-colors group-hover:text-white/60">
+                                Our architecture ensures LCP stays under 1.2s even on slow 4G networks.
+                                Google loves fast sites, and so do your customers.
+                            </p>
+                        </motion.div>
                     </motion.div>
 
                     {/* Scalability Info */}
-                    <motion.div
-                        whileHover={{ y: -20, scale: 1.02 }}
-                        className="rounded-3xl border border-white/5 bg-white/[0.02] p-10 backdrop-blur-3xl transition-all duration-500 mt-0 md:mt-24 cursor-default hover:bg-white/[0.04] hover:border-white/10 group"
-                    >
-                        <h4 className="text-[10px] font-black tracking-widest text-white/30 uppercase mb-4 transition-colors group-hover:text-white/60">Scaling</h4>
-                        <p className="text-3xl font-bold mb-6 transition-colors group-hover:text-white">Edge Infrastructure</p>
-                        <p className="text-sm text-white/40 leading-relaxed font-medium transition-colors group-hover:text-white/60">
-                            Deploy globally with Vercel Edge. Your site is served from the nearest server to the user,
-                            reducing latency to near-zero globally.
-                        </p>
-                    </motion.div>
+                    <div className="mt-0 md:mt-24 h-full">
+                        <motion.div
+                            whileHover={{ y: -20, scale: 1.02 }}
+                            className="rounded-3xl border border-white/5 bg-white/[0.02] p-10 backdrop-blur-3xl transition-all duration-500 cursor-default hover:bg-white/[0.04] hover:border-white/10 group h-full"
+                        >
+                            <h4 className="text-[10px] font-black tracking-widest text-white/30 uppercase mb-4 transition-colors group-hover:text-white/60">Scaling</h4>
+                            <p className="text-3xl font-bold mb-6 transition-colors group-hover:text-white">Edge Infrastructure</p>
+                            <p className="text-sm text-white/40 leading-relaxed font-medium transition-colors group-hover:text-white/60">
+                                Deploy globally with Vercel Edge. Your site is served from the nearest server to the user,
+                                reducing latency to near-zero globally.
+                            </p>
+                        </motion.div>
+                    </div>
 
                     {/* SEO Info */}
-                    <motion.div
-                        style={{ y: y2Dynamic }}
-                        whileHover={{ y: -20, scale: 1.02 }}
-                        className="rounded-3xl border border-white/5 bg-white/[0.02] p-10 backdrop-blur-3xl transition-all duration-500 cursor-default hover:bg-white/[0.04] hover:border-white/10 group"
-                    >
-                        <h4 className="text-[10px] font-black tracking-widest text-white/30 uppercase mb-4 transition-colors group-hover:text-white/60">SEO Efficiency</h4>
-                        <p className="text-3xl font-bold mb-6 transition-colors group-hover:text-white">Metadata Engine</p>
-                        <p className="text-sm text-white/40 leading-relaxed font-medium transition-colors group-hover:text-white/60">
-                            Dynamic OpenGraph images and lightning-fast sitemaps.
-                            We automate your SEO so you rank higher while focusing on your code.
-                        </p>
+                    <motion.div style={{ y: y2Dynamic }}>
+                        <motion.div
+                            whileHover={{ y: -20, scale: 1.02 }}
+                            className="rounded-3xl border border-white/5 bg-white/[0.02] p-10 backdrop-blur-3xl transition-all duration-500 cursor-default hover:bg-white/[0.04] hover:border-white/10 group h-full"
+                        >
+                            <h4 className="text-[10px] font-black tracking-widest text-white/30 uppercase mb-4 transition-colors group-hover:text-white/60">SEO Efficiency</h4>
+                            <p className="text-3xl font-bold mb-6 transition-colors group-hover:text-white">Metadata Engine</p>
+                            <p className="text-sm text-white/40 leading-relaxed font-medium transition-colors group-hover:text-white/60">
+                                Dynamic OpenGraph images and lightning-fast sitemaps.
+                                We automate your SEO so you rank higher while focusing on your code.
+                            </p>
+                        </motion.div>
                     </motion.div>
                 </div>
             </div>

@@ -72,11 +72,11 @@ export function Navbar() {
     useMotionValueEvent(scrollY, "change", (latest) => {
         const isScrollingDown = latest > lastScrollY.current;
         if (latest > 100) {
-            setVisible(!isScrollingDown);
-            setScrolled(true);
+            setScrolled(isScrollingDown); // Scrolled (minimized) when going down
+            setVisible(true); // Always keep it visible since user wants expansion on scroll up
         } else {
-            setVisible(true);
             setScrolled(false);
+            setVisible(true);
         }
         lastScrollY.current = latest;
     });
