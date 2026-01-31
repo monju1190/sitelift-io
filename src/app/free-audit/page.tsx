@@ -16,6 +16,8 @@ import {
 import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 
 export default function FreeAuditPage() {
     const [step, setStep] = useState(1);
@@ -25,6 +27,47 @@ export default function FreeAuditPage() {
     const [name, setName] = useState("");
     const [reportData, setReportData] = useState<any>(null);
     const [error, setError] = useState<string | null>(null);
+    const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
+
+    const downloadPdf = async () => {
+        setIsGeneratingPdf(true);
+        const reportElement = document.getElementById('audit-report-content');
+        if (!reportElement) return;
+
+        try {
+            // Wait for animations to settle
+            await new Promise(resolve => setTimeout(resolve, 500));
+
+            const canvas = await html2canvas(reportElement, {
+                scale: 2,
+                useCORS: true,
+                backgroundColor: "#000000",
+                logging: false,
+                onclone: (clonedDoc) => {
+                    // Remove elements that might break html2canvas
+                    const el = clonedDoc.getElementById('audit-report-content');
+                    if (el) {
+                        el.style.backdropFilter = 'none';
+                        (el.style as any).webkitBackdropFilter = 'none';
+                    }
+                }
+            });
+            const imgData = canvas.toDataURL('image/jpeg', 0.9);
+            const pdf = new jsPDF({
+                orientation: 'p',
+                unit: 'px',
+                format: [canvas.width / 2, canvas.height / 2]
+            });
+
+            pdf.addImage(imgData, 'JPEG', 0, 0, canvas.width / 2, canvas.height / 2);
+            pdf.save(`Sitelift_Audit_${new URL(url).hostname}.pdf`);
+        } catch (err) {
+            console.error("PDF Export failed:", err);
+            alert("Export failed. Please try again or ensure you are using a modern browser.");
+        } finally {
+            setIsGeneratingPdf(false);
+        }
+    };
 
     const handleStartAudit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -276,83 +319,156 @@ export default function FreeAuditPage() {
                                     key="report"
                                     initial={{ opacity: 0, scale: 0.9 }}
                                     animate={{ opacity: 1, scale: 1 }}
-                                    className="rounded-[3.5rem] border border-white/10 bg-white/[0.04] p-10 backdrop-blur-3xl"
+                                    className="rounded-[3.5rem] border border-white/10 bg-white/[0.04] p-6 md:p-10 backdrop-blur-3xl"
                                 >
-                                    <div className="mb-8 flex items-center justify-between">
-                                        <div>
-                                            <h3 className="text-2xl font-black tracking-tight uppercase">Diagnostic Report</h3>
-                                            <p className="text-[10px] font-bold text-white/30 uppercase tracking-[0.2em] mt-1 truncate max-w-[250px]">
-                                                Target: {url}
-                                            </p>
-                                        </div>
-                                        <div className="rounded-full bg-emerald-500/10 px-3 py-1 text-[10px] font-bold text-emerald-400 uppercase tracking-widest">
-                                            Analysis Complete
-                                        </div>
-                                    </div>
-
-                                    <div className="grid grid-cols-2 gap-4 mb-10">
-                                        {[
-                                            { label: "Performance", score: reportData?.performance || 84, color: reportData?.performance < 90 ? "text-amber-400" : "text-emerald-400" },
-                                            { label: "Accessibility", score: reportData?.accessibility || 92, color: reportData?.accessibility < 90 ? "text-amber-400" : "text-emerald-400" },
-                                            { label: "Best Practices", score: reportData?.bestPractices || 78, color: reportData?.bestPractices < 90 ? "text-amber-400" : "text-emerald-400" },
-                                            { label: "SEO", score: reportData?.seo || 81, color: reportData?.seo < 90 ? "text-amber-400" : "text-emerald-400" }
-                                        ].map((metric, i) => (
-                                            <div key={i} className="rounded-2xl border border-white/5 bg-white/5 p-4 text-center transition-all hover:bg-white/10">
-                                                <div className={`text-3xl font-black mb-1 ${metric.color}`}>{metric.score}</div>
-                                                <div className="text-[9px] font-black text-white/30 uppercase tracking-widest">{metric.label}</div>
-                                            </div>
-                                        ))}
-                                    </div>
-
-                                    <div className="space-y-4 mb-10">
-                                        {reportData?.insights?.map((insight: any, i: number) => (
-                                            <div key={i} className="flex items-start gap-3">
-                                                {insight.type === "critical" ? (
-                                                    <Zap className="h-4 w-4 text-amber-400 mt-1" />
-                                                ) : (
-                                                    <Cpu className="h-4 w-4 text-emerald-400 mt-1" />
-                                                )}
-                                                <p className="text-sm text-white/60 leading-relaxed font-medium text-left">
-                                                    <span className="text-white font-bold">{insight.label}:</span> {insight.message}
-                                                    {insight.label === "LCP" && " (Large Contentful Paint)"}
-                                                    {insight.label === "TBT" && " (Total Blocking Time)"}
-                                                </p>
-                                            </div>
-                                        ))}
-                                    </div>
-
-                                    {(() => {
-                                        const score = reportData?.performance || 0;
-                                        let message = "Your infrastructure is running at sub-optimal levels. We can propel these scores to 100 within 14 days.";
-
-                                        if (score >= 90) {
-                                            message = "Exceptional performance detected. You are leading the industry. We can help you maintain this peak efficiency as you continue to scale.";
-                                        } else if (score >= 70) {
-                                            message = "Solid architecture, but potential remains untapped. We can fine-tune your Core Web Vitals to reach a consistent 100.";
-                                        } else if (score < 50) {
-                                            message = "Critical performance bottlenecks isolated. Your conversion rates are at significant risk. Immediate architectural intervention is recommended.";
-                                        }
-
-                                        return (
-                                            <div className="rounded-2xl bg-white/5 p-6 mb-8 text-center border border-white/5">
-                                                <p className="text-xs text-white/40 mb-4 font-medium italic leading-relaxed">
-                                                    "{message}"
-                                                </p>
-                                                <div className="text-[10px] font-black text-white uppercase tracking-widest">
-                                                    — The Sitelift Team
+                                    <div id="audit-report-content" className="p-2 md:p-4 bg-black/40 rounded-[2.5rem]">
+                                        <div className="mb-0 flex items-center justify-between border-b border-white/10 pb-8 px-4">
+                                            <div>
+                                                <div className="flex items-center gap-2 mb-2">
+                                                    <div className="h-6 w-6 rounded bg-white flex items-center justify-center">
+                                                        <Zap className="h-4 w-4 text-black" />
+                                                    </div>
+                                                    <h3 className="text-xl font-black tracking-tight uppercase">Sitelift Audit</h3>
                                                 </div>
+                                                <p className="text-[10px] font-bold text-white/30 uppercase tracking-[0.2em] truncate max-w-[200px] md:max-w-xs">
+                                                    {url}
+                                                </p>
                                             </div>
-                                        );
-                                    })()}
+                                            <div className="text-right">
+                                                <div className="text-[9px] font-black text-white/20 uppercase tracking-widest mb-1">Report Prepared For</div>
+                                                <div className="text-xs font-bold text-white uppercase">{name || "Valued Partnership"}</div>
+                                            </div>
+                                        </div>
 
-                                    <div className="flex flex-col gap-4">
-                                        <button
-                                            onClick={() => setStep(4)}
-                                            className="w-full rounded-full bg-white py-4 text-[10px] font-black text-black uppercase tracking-widest hover:scale-[1.02] transition-transform"
-                                        >
-                                            Secure Full Intervention
-                                        </button>
-                                        <div className="flex items-center justify-center gap-6">
+                                        {/* Main Scores Chart Section */}
+                                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 py-10 px-4">
+                                            {[
+                                                { label: "Performance", score: reportData?.performance || 0 },
+                                                { label: "Accessibility", score: reportData?.accessibility || 0 },
+                                                { label: "Best Practices", score: reportData?.bestPractices || 0 },
+                                                { label: "SEO", score: reportData?.seo || 0 }
+                                            ].map((metric, i) => (
+                                                <div key={i} className="flex flex-col items-center">
+                                                    <div className="relative h-24 w-24 mb-4">
+                                                        <svg className="h-full w-full -rotate-90">
+                                                            <circle cx="48" cy="48" r="44" stroke="currentColor" strokeWidth="6" fill="transparent" className="text-white/5" />
+                                                            <motion.circle
+                                                                cx="48" cy="48" r="44"
+                                                                stroke={metric.score >= 90 ? "#10b981" : metric.score >= 50 ? "#f59e0b" : "#ef4444"}
+                                                                strokeWidth="6" strokeDasharray={276}
+                                                                initial={{ strokeDashoffset: 276 }}
+                                                                animate={{ strokeDashoffset: 276 - (276 * metric.score) / 100 }}
+                                                                transition={{ duration: 1.5, delay: 0.2 + i * 0.1, ease: "easeOut" }}
+                                                                fill="transparent"
+                                                                strokeLinecap="round"
+                                                            />
+                                                        </svg>
+                                                        <div className="absolute inset-0 flex items-center justify-center flex-col">
+                                                            <span className="text-2xl font-black tracking-tighter">{metric.score}</span>
+                                                        </div>
+                                                    </div>
+                                                    <span className="text-[9px] font-black text-white/30 uppercase tracking-widest text-center">{metric.label}</span>
+                                                </div>
+                                            ))}
+                                        </div>
+
+                                        {/* Core Web Vitals - The Real Data */}
+                                        <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 mb-10 px-4">
+                                            {[
+                                                { label: "FCP", value: reportData?.metrics?.fcp, name: "First Contentful Paint" },
+                                                { label: "LCP", value: reportData?.metrics?.lcp, name: "Largest Contentful Paint" },
+                                                { label: "CLS", value: reportData?.metrics?.cls, name: "Cumulative Layout Shift" },
+                                                { label: "TBT", value: reportData?.metrics?.tbt, name: "Total Blocking Time" },
+                                                { label: "TTI", value: reportData?.metrics?.tti, name: "Time to Interactive" },
+                                                { label: "Speed Index", value: reportData?.metrics?.si, name: "Visual Load Speed" }
+                                            ].map((m, i) => (
+                                                <div key={i} className="rounded-2xl border border-white/5 bg-white/[0.02] p-4 group transition-colors hover:bg-white/[0.05]">
+                                                    <div className="text-[9px] font-black text-white/20 uppercase tracking-widest mb-1 group-hover:text-white/40">{m.label}</div>
+                                                    <div className="text-lg font-black text-white mb-1">{m.value}</div>
+                                                    <div className="text-[8px] font-medium text-white/20 uppercase tracking-tighter">{m.name}</div>
+                                                </div>
+                                            ))}
+                                        </div>
+
+                                        {/* Critical Opportunities */}
+                                        <div className="mb-10 px-4">
+                                            <div className="text-[10px] font-black text-white/40 uppercase tracking-[0.3em] mb-6 flex items-center gap-2">
+                                                <Search className="h-3 w-3" />
+                                                Critical Opportunities
+                                            </div>
+                                            <div className="space-y-3">
+                                                {reportData?.opportunities?.map((opt: any, i: number) => (
+                                                    <div key={i} className="flex items-start gap-4 rounded-2xl border border-white/5 bg-white/5 p-4 transition-all hover:border-white/20">
+                                                        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-orange-500/10 text-orange-500">
+                                                            <Zap className="h-4 w-4" />
+                                                        </div>
+                                                        <div>
+                                                            <div className="flex items-center gap-3 mb-1">
+                                                                <h4 className="text-sm font-bold text-white">{opt.title}</h4>
+                                                                {opt.displayValue && (
+                                                                    <span className="text-[9px] font-black bg-white/10 px-2 py-0.5 rounded text-white/60">-{opt.displayValue}</span>
+                                                                )}
+                                                            </div>
+                                                            <p className="text-[10px] text-white/40 leading-relaxed max-w-lg">{opt.description.replace(/\[Learn more\].*/, "")}</p>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                                {(!reportData?.opportunities || reportData.opportunities.length === 0) && (
+                                                    <div className="rounded-2xl border border-emerald-500/10 bg-emerald-500/5 p-8 text-center">
+                                                        <CheckCircle2 className="h-6 w-6 text-emerald-500 mx-auto mb-3" />
+                                                        <p className="text-xs font-bold text-emerald-500/60 uppercase tracking-widest">No Critical Performance Leaks Detected</p>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+
+                                        {/* Sitelift Verdict */}
+                                        <div className="px-4 pb-8">
+                                            {(() => {
+                                                const score = reportData?.performance || 0;
+                                                let message = "Your infrastructure is running at sub-optimal levels. We can propel these scores to 100 within 14 days.";
+                                                if (score >= 90) message = "Exceptional performance detected. You are leading the industry. We can help you maintain this peak efficiency as you continue to scale.";
+                                                else if (score >= 70) message = "Solid architecture, but potential remains untapped. We can fine-tune your Core Web Vitals to reach a consistent 100.";
+                                                else if (score < 50) message = "Critical performance bottlenecks isolated. Your conversion rates are at significant risk. Immediate architectural intervention is recommended.";
+
+                                                return (
+                                                    <div className="rounded-2xl bg-white/5 p-6 text-center border border-white/10">
+                                                        <p className="text-xs text-white/60 mb-4 font-medium italic leading-relaxed">
+                                                            "{message}"
+                                                        </p>
+                                                        <div className="text-[10px] font-black text-white uppercase tracking-[0.3em]">
+                                                            — The Sitelift Team
+                                                        </div>
+                                                    </div>
+                                                );
+                                            })()}
+                                        </div>
+                                    </div>
+
+                                    {/* Action Buttons */}
+                                    <div className="mt-8 flex flex-col gap-4">
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            <button
+                                                onClick={() => setStep(4)}
+                                                className="rounded-full bg-white py-4 text-[10px] font-black text-black uppercase tracking-widest hover:scale-[1.02] transition-transform shadow-[0_20px_40px_rgba(255,255,255,0.1)]"
+                                            >
+                                                Secure Intervention
+                                            </button>
+                                            <button
+                                                onClick={downloadPdf}
+                                                disabled={isGeneratingPdf}
+                                                className="rounded-full border border-white/20 bg-white/5 py-4 text-[10px] font-black text-white uppercase tracking-widest hover:bg-white/10 transition-all flex items-center justify-center gap-2 group"
+                                            >
+                                                {isGeneratingPdf ? (
+                                                    <div className="h-3 w-3 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                                                ) : (
+                                                    <ArrowRight className="h-3 w-3 rotate-90" />
+                                                )}
+                                                {isGeneratingPdf ? "Generating..." : "Download Full Report"}
+                                            </button>
+                                        </div>
+
+                                        <div className="flex items-center justify-center gap-6 mt-2">
                                             <button
                                                 onClick={() => {
                                                     setStep(1);

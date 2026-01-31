@@ -24,24 +24,37 @@ export async function POST(req: Request) {
 
         const lighthouse = data.lighthouseResult;
         const categories = lighthouse.categories;
+        const audits = lighthouse.audits;
+
+        // Extract opportunities (failed audits with potential savings)
+        const opportunities = Object.values(audits)
+            .filter((audit: any) => audit.details?.type === 'opportunity' && (audit.score !== null && audit.score < 0.9))
+            .map((audit: any) => ({
+                id: audit.id,
+                title: audit.title,
+                description: audit.description,
+                savings: audit.details?.overallSavingsMs || audit.details?.overallSavingsBytes || 0,
+                displayValue: audit.displayValue
+            }))
+            .sort((a, b) => b.savings - a.savings)
+            .slice(0, 5);
 
         const report = {
             performance: Math.round(categories.performance.score * 100),
             accessibility: Math.round(categories.accessibility.score * 100),
             bestPractices: Math.round(categories["best-practices"].score * 100),
             seo: Math.round(categories.seo.score * 100),
-            insights: [
-                {
-                    type: "critical",
-                    label: "LCP",
-                    message: lighthouse.audits["largest-contentful-paint"].displayValue,
-                },
-                {
-                    type: "insight",
-                    label: "TBT",
-                    message: lighthouse.audits["total-blocking-time"].displayValue,
-                }
-            ]
+            metrics: {
+                fcp: audits["first-contentful-paint"].displayValue,
+                si: audits["speed-index"]?.displayValue || "N/A",
+                lcp: audits["largest-contentful-paint"].displayValue,
+                tti: audits["interactive"].displayValue,
+                tbt: audits["total-blocking-time"].displayValue,
+                cls: audits["cumulative-layout-shift"].displayValue,
+            },
+            opportunities,
+            timestamp: new Date().toISOString(),
+            url: url
         };
 
         return NextResponse.json(report);
