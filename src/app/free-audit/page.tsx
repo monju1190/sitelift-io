@@ -31,39 +31,64 @@ export default function FreeAuditPage() {
 
     const downloadPdf = async () => {
         setIsGeneratingPdf(true);
-        const reportElement = document.getElementById('audit-report-content');
-        if (!reportElement) return;
+        // We capture a dedicated, simplified version of the report to ensure success
+        const reportElement = document.getElementById('audit-pdf-template');
+        if (!reportElement) {
+            setIsGeneratingPdf(false);
+            return;
+        }
 
         try {
-            // Wait for animations to settle
-            await new Promise(resolve => setTimeout(resolve, 500));
+            // Force visibility for capture - BUT OFF SCREEN to prevent flash
+            reportElement.style.display = 'block';
+            reportElement.style.position = 'fixed';
+            reportElement.style.left = '-10000px';
+            reportElement.style.top = '0';
+
+            await new Promise(resolve => setTimeout(resolve, 500)); // Ensure images load
 
             const canvas = await html2canvas(reportElement, {
-                scale: 2,
+                scale: 2, // High res
                 useCORS: true,
-                backgroundColor: "#000000",
+                backgroundColor: "#ffffff",
                 logging: false,
+                width: 800,
+                windowWidth: 1000, // Force a wide window context
                 onclone: (clonedDoc) => {
-                    // Remove elements that might break html2canvas
-                    const el = clonedDoc.getElementById('audit-report-content');
+                    const el = clonedDoc.getElementById('audit-pdf-template');
                     if (el) {
-                        el.style.backdropFilter = 'none';
-                        (el.style as any).webkitBackdropFilter = 'none';
+                        // Ensure it's visible in the clone viewport logic if needed, 
+                        // though html2canvas typically handles off-screen elements if passed directly.
+                        // We reset positioning in the clone just in case to ensure full capture
+                        el.style.position = 'relative';
+                        el.style.left = '0';
+                        el.style.top = '0';
                     }
                 }
             });
-            const imgData = canvas.toDataURL('image/jpeg', 0.9);
+
+            // Restore hidden state
+            reportElement.style.display = 'none';
+
+            const imgData = canvas.toDataURL('image/png');
+            const imgWidth = 210; // A4 width in mm
+            const pageHeight = (canvas.height * imgWidth) / canvas.width;
+
+            // Create PDF with dynamic height to fit all content (no cutoff)
             const pdf = new jsPDF({
                 orientation: 'p',
-                unit: 'px',
-                format: [canvas.width / 2, canvas.height / 2]
+                unit: 'mm',
+                format: [imgWidth, pageHeight]
             });
 
-            pdf.addImage(imgData, 'JPEG', 0, 0, canvas.width / 2, canvas.height / 2);
-            pdf.save(`Sitelift_Audit_${new URL(url).hostname}.pdf`);
+            pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, pageHeight);
+
+            let hostname = 'report';
+            try { hostname = new URL(url).hostname; } catch (e) { }
+            pdf.save(`Sitelift_Audit_${hostname}.pdf`);
         } catch (err) {
             console.error("PDF Export failed:", err);
-            alert("Export failed. Please try again or ensure you are using a modern browser.");
+            alert("Digital report generation encountered a technical limitation. Please use the Print (Ctrl+P) option and select 'Save as PDF' to export your report reliably.");
         } finally {
             setIsGeneratingPdf(false);
         }
@@ -483,6 +508,128 @@ export default function FreeAuditPage() {
                                             <Link href="/" className="text-[9px] font-black text-white/20 uppercase tracking-widest hover:text-white transition-colors text-center">
                                                 Return to Home
                                             </Link>
+                                        </div>
+                                    </div>
+
+                                    <div id="audit-pdf-template" style={{ display: 'none', width: '800px', backgroundColor: '#ffffff', color: '#000000', fontFamily: 'sans-serif', position: 'fixed', left: '-10000px', top: 0, paddingBottom: '20px' }}>
+                                        {/* Cover / Header */}
+                                        <div style={{ padding: '60px', borderBottom: '2px solid #f3f4f6' }}>
+                                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                                                <div>
+                                                    <div style={{ marginBottom: '25px', height: '60px', display: 'flex', alignItems: 'center' }}>
+                                                        <span style={{ fontSize: '32px', fontWeight: '900', letterSpacing: '-0.04em', color: '#000', fontFamily: 'sans-serif', lineHeight: '1', textTransform: 'uppercase' }}>Sitelift.io</span>
+                                                    </div>
+                                                    <h1 style={{ margin: '20px 0 0 0', fontSize: '38px', fontWeight: '900', letterSpacing: '-0.03em', lineHeight: '1.1', color: '#000' }}>
+                                                        PERFORMANCE<br />
+                                                        <span style={{ color: '#6b7280' }}>AUDIT REPORT</span>
+                                                    </h1>
+                                                </div>
+                                                <div style={{ textAlign: 'right' }}>
+                                                    <div style={{ backgroundColor: '#f9fafb', padding: '15px 25px', borderRadius: '12px', border: '1px solid #e5e7eb' }}>
+                                                        <p style={{ margin: '0 0 5px 0', fontSize: '9px', fontWeight: '700', color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Target URL</p>
+                                                        <p style={{ margin: 0, fontSize: '11px', fontWeight: '800', color: '#111827' }}>{url}</p>
+                                                    </div>
+                                                    <div style={{ marginTop: '15px' }}>
+                                                        <p style={{ margin: '0 0 2px 0', fontSize: '9px', color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Prepared For</p>
+                                                        <p style={{ margin: 0, fontSize: '14px', fontWeight: '800', color: '#000' }}>{name || 'Valued Client'}</p>
+                                                        <p style={{ margin: '5px 0 0 0', fontSize: '9px', color: '#4b5563' }}>{new Date().toLocaleDateString()}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div style={{ padding: '60px' }}>
+                                            {/* Score Showcase */}
+                                            <div style={{ marginBottom: '50px' }}>
+                                                <h3 style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.2em', color: '#111', marginBottom: '20px', fontWeight: '800', borderBottom: '1px solid #e5e7eb', paddingBottom: '10px' }}>Executive Summary</h3>
+                                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px' }}>
+                                                    {[
+                                                        { label: 'Performance', val: reportData?.performance },
+                                                        { label: 'Accessibility', val: reportData?.accessibility },
+                                                        { label: 'Best Practices', val: reportData?.bestPractices },
+                                                        { label: 'SEO', val: reportData?.seo }
+                                                    ].map((m, i) => {
+                                                        const color = (m.val || 0) >= 90 ? '#059669' : (m.val || 0) >= 50 ? '#d97706' : '#dc2626';
+                                                        return (
+                                                            <div key={i} style={{ backgroundColor: '#fff', padding: '25px', borderRadius: '20px', textAlign: 'center', border: '1px solid #e5e7eb', position: 'relative', overflow: 'hidden', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)' }}>
+                                                                <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '4px', backgroundColor: color }}></div>
+                                                                <h2 style={{ fontSize: '42px', fontWeight: '900', margin: '0 0 5px 0', color: color, letterSpacing: '-0.05em' }}>{m.val}</h2>
+                                                                <p style={{ fontSize: '9px', color: '#4b5563', margin: 0, textTransform: 'uppercase', fontWeight: '700', letterSpacing: '0.1em' }}>{m.label}</p>
+                                                            </div>
+                                                        );
+                                                    })}
+                                                </div>
+                                            </div>
+
+                                            {/* Core Metrics Grid */}
+                                            <div style={{ marginBottom: '50px' }}>
+                                                <h3 style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.2em', color: '#111', marginBottom: '20px', fontWeight: '800', borderBottom: '1px solid #e5e7eb', paddingBottom: '10px' }}>Core Web Vitals</h3>
+                                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '15px' }}>
+                                                    {[
+                                                        { k: 'FCP', n: 'First Contentful Paint', v: reportData?.metrics?.fcp },
+                                                        { k: 'LCP', n: 'Largest Contentful Paint', v: reportData?.metrics?.lcp },
+                                                        { k: 'CLS', n: 'Cumulative Layout Shift', v: reportData?.metrics?.cls },
+                                                        { k: 'TBT', n: 'Total Blocking Time', v: reportData?.metrics?.tbt },
+                                                        { k: 'TTI', n: 'Time to Interactive', v: reportData?.metrics?.tti },
+                                                        { k: 'SI', n: 'Speed Index', v: reportData?.metrics?.si }
+                                                    ].map((m, i) => (
+                                                        <div key={i} style={{ backgroundColor: '#f9fafb', border: '1px solid #e5e7eb', padding: '20px', borderRadius: '12px' }}>
+                                                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                                                                <span style={{ fontSize: '10px', fontWeight: '900', color: '#374151' }}>{m.k}</span>
+                                                            </div>
+                                                            <p style={{ fontSize: '24px', fontWeight: '900', margin: 0, color: '#111827', letterSpacing: '-0.02em' }}>{m.v}</p>
+                                                            <p style={{ fontSize: '8px', color: '#6b7280', margin: '5px 0 0 0', textTransform: 'uppercase', fontWeight: '600' }}>{m.n}</p>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+
+                                            {/* Opportunities */}
+                                            <div>
+                                                <h3 style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.2em', color: '#111', marginBottom: '20px', fontWeight: '800', borderBottom: '1px solid #e5e7eb', paddingBottom: '10px' }}>Optimization Opportunities</h3>
+                                                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                                                    {reportData?.opportunities?.map((o: any, i: number) => (
+                                                        <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '15px', backgroundColor: '#fff', padding: '20px', borderRadius: '12px', border: '1px solid #e5e7eb', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
+                                                            <div style={{ backgroundColor: '#fee2e2', color: '#dc2626', padding: '10px', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                                                    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+                                                                </svg>
+                                                            </div>
+                                                            <div style={{ flex: 1 }}>
+                                                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                                                                    <h4 style={{ fontSize: '14px', margin: 0, fontWeight: '800', color: '#111827' }}>{o.title}</h4>
+                                                                    {o.savings > 0 && (
+                                                                        <span style={{ fontSize: '10px', fontWeight: '700', backgroundColor: '#fee2e2', color: '#991b1b', padding: '4px 8px', borderRadius: '4px', whiteSpace: 'nowrap' }}>
+                                                                            Potential Savings
+                                                                        </span>
+                                                                    )}
+                                                                </div>
+                                                                <p style={{ fontSize: '12px', color: '#4b5563', margin: 0, lineHeight: '1.6', fontWeight: '500', paddingBottom: '2px' }}>{o.description.split('[')[0]}</p>
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                    {(!reportData?.opportunities || reportData.opportunities.length === 0) && (
+                                                        <div style={{ padding: '30px', textAlign: 'center', border: '2px dashed #e5e7eb', borderRadius: '12px', backgroundColor: '#f9fafb' }}>
+                                                            <p style={{ fontSize: '12px', color: '#6b7280', fontStyle: 'italic', fontWeight: '500' }}>No critical opportunities found. Your site is well optimized.</p>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* Footer */}
+                                        <div style={{ padding: '30px 60px', borderTop: '1px solid #e5e7eb', backgroundColor: '#f9fafb', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                            <p style={{ fontSize: '9px', color: '#6b7280', fontStyle: 'italic', margin: 0, fontWeight: '500' }}>
+                                                "Speed is a feature." — Generated by Sitelift Intelligence
+                                            </p>
+                                            <div style={{ display: 'flex', gap: '5px' }}>
+                                                <div style={{ width: '4px', height: '4px', borderRadius: '50%', backgroundColor: '#d1d5db' }}></div>
+                                                <div style={{ width: '4px', height: '4px', borderRadius: '50%', backgroundColor: '#d1d5db' }}></div>
+                                                <div style={{ width: '4px', height: '4px', borderRadius: '50%', backgroundColor: '#d1d5db' }}></div>
+                                            </div>
+                                            <p style={{ fontSize: '9px', color: '#111827', fontWeight: '900', margin: 0 }}>
+                                                SITELIFT.IO
+                                            </p>
                                         </div>
                                     </div>
                                 </motion.div>
